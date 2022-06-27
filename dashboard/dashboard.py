@@ -23,8 +23,8 @@ df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
 fig = px.line(df, x="Date", y="Volume", color="Exercise", facet_col="Muscle Groups", facet_col_wrap=2, title="Lift Volume by Exercise Over Time")
 fig2 = px.line(df, x="Date", y="Projected 1RM", color="Exercise", facet_col="Muscle Groups", facet_col_wrap=2, title="Projected 1RM by Exercise Over Time")
 last_three_months = df[df["Date"] >= datetime.date.today() - pd.offsets.MonthBegin(3)]
-print(last_three_months)
 fig3 = px.line(last_three_months, x="Date", y="Volume", color="Exercise", facet_col="Muscle Groups", facet_col_wrap=2, title="Lift Volume by Exercise Over Last Three Months")
+fig4 = px.line(last_three_months, x="Date", y="Projected 1RM", color="Exercise", facet_col="Muscle Groups", facet_col_wrap=2, title="Projected 1RM by Exercise Over Last Three Months")
 
 # App layout
 app.layout = html.Div([
@@ -40,6 +40,7 @@ app.layout = html.Div([
     dcc.Graph(className="custom-height", figure=fig),
     dcc.Graph(className="custom-height", figure=fig2),
     dcc.Graph(className="custom-height", figure=fig3),
+    dcc.Graph(className="custom-height", figure=fig4)
 ])
 
 if __name__ == '__main__':
