@@ -101,7 +101,7 @@ Date,Exercise,Muscle Groups,Sets,Reps,Total Reps,Weight,Negatives
 11/1/2013,Concentration Curls,Biceps,4,10,40,26,FALSE
 11/1/2013,Shoulder Press,Deltoids,4,10,40,30,FALSE
 5/3/2020,Tricep Extensions,Triceps,3,10,30,20,FALSE
-5/7/2020,Dumbell Kickbacks,Triceps,2,15,30,10,FALSE
+5/7/2020,Dumbbell Kickbacks,Triceps,2,15,30,10,FALSE
 5/8/2020,Tricep Extensions,Triceps,1,1,1,40,FALSE
 6/24/2022,Hammer Curls,Biceps,3,10,22,20,TRUE
 6/27/2022,Dumbbell Flys,Chest,3,10,30,20,TRUE
@@ -110,3 +110,5 @@ Date,Exercise,Muscle Groups,Sets,Reps,Total Reps,Weight,Negatives
 6/27/2022,Forearms (Under),Forearms,4,10,40,20,FALSE
 6/27/2022,Concentration Curls,Biceps,3,5,15,30,TRUE
 6/27/2022,Shoulder Press,Deltoids,3,8,24,30,TRUE
+6/27/2022,Hammer Curls,Biceps,3,5,15,30,TRUE
+6/27/2022,Dumbbell Kickbacks,Triceps,3,5,15,20,FALSE
