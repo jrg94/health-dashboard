@@ -7,7 +7,7 @@ from dash import html, dcc, Input, Output
 # App initialization
 app = dash.Dash(
   __name__,
-  title="Dashboard Template"
+  title="Health Dashboard"
 )
 
 # Special line of code for Heroku
@@ -18,6 +18,16 @@ df = pd.read_csv("dashboard/data/exercises.csv")
 df["Date"] = pd.to_datetime(df["Date"])
 df["Volume"] = df["Weight"] * df["Total Reps"]
 df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
+
+fatigue = df[df["Date"] >= datetime.date.today() - pd.offsets.Day(2)] \
+  .groupby("Muscle Groups") \
+  .agg({"Volume": "sum", "Projected 1RM": "mean"})
+missing = set(df["Muscle Groups"].unique()) - set(fatigue.index)
+fatigue["Cumulative Volume / Average Project 1RM"] = fatigue["Volume"] / fatigue["Projected 1RM"]
+for muscle in missing:
+  fatigue.loc[muscle] = 0
+fatigue = fatigue.sort_values("Cumulative Volume / Average Project 1RM", ascending=True)
+fig = px.bar(fatigue, y="Cumulative Volume / Average Project 1RM")
 
 # App layout
 app.layout = html.Div([
@@ -49,7 +59,19 @@ app.layout = html.Div([
       failure. 
       """
     ),
-    dcc.Graph(id="1rm-over-time", className="custom-height")
+    dcc.Graph(id="1rm-over-time", className="custom-height"),
+    html.H2("Muscle Fatigue"),
+    html.P(
+      """
+      Muscle fatigue is a metric that I use to track how much muscle I've used in the
+      past 48 hours. It's a bit rudimentary, but basically I compute a ratio of muscle 
+      group volume (sum) against the projected 1RM (mean). This is a pretty sloppy metric 
+      since I don't find 1RM very accurate and the aggregate functions are somewhat misleading, 
+      but I don't really think it needs to be that accurate. Regardless, it's not like I have
+      a scientific way of assessing fatique anyway.
+      """
+    ),
+    dcc.Graph(figure=fig)
 ])
 
 @app.callback(
