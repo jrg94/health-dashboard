@@ -3,6 +3,7 @@ import dash
 import pandas as pd
 import plotly.express as px
 from dash import html, dcc, Input, Output
+from plotly_calplot import calplot
 
 # App initialization
 app = dash.Dash(
@@ -19,6 +20,7 @@ df["Date"] = pd.to_datetime(df["Date"])
 df["Volume"] = df["Weight"] * df["Total Reps"]
 df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
 
+# Plots
 fatigue = df[df["Date"] >= datetime.date.today() - pd.offsets.Day(2)] \
   .groupby("Muscle Groups") \
   .agg({"Volume": "sum", "Projected 1RM": "mean"})
@@ -28,6 +30,9 @@ for muscle in missing:
   fatigue.loc[muscle] = 0
 fatigue = fatigue.sort_values("Cumulative Volume / Average Project 1RM", ascending=True)
 fig = px.bar(fatigue, y="Cumulative Volume / Average Project 1RM")
+
+days = df.groupby("Date").agg({"Exercise": "count"}).reset_index()
+fig2 = calplot(days, x="Date", y="Exercise", colorscale="blues", years_title=True)
 
 # App layout
 app.layout = html.Div([
@@ -71,7 +76,16 @@ app.layout = html.Div([
       a scientific way of assessing fatique anyway.
       """
     ),
-    dcc.Graph(figure=fig)
+    dcc.Graph(figure=fig),
+    html.H2("Calendar View"),
+    html.P(
+      """
+      This is a quick calendar view of all my workouts. The heatmaps show days where 
+      I did less or more workouts. I borrowed this figure from calplot. I don't really
+      love it since I can't figure out how to make it dynamic. That said, it gets the job done.
+      """
+    ),
+    dcc.Graph(figure=fig2)
 ])
 
 @app.callback(
