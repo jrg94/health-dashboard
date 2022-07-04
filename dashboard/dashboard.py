@@ -34,6 +34,26 @@ fig = px.bar(fatigue, y="Cumulative Volume / Average Project 1RM")
 days = df.groupby("Date").agg({"Exercise": "count"}).reset_index()
 fig2 = calplot(days, x="Date", y="Exercise", colorscale="blues", years_title=True)
 
+def exercise_sets_reps(df):
+  exercise_plots = []
+  for exercise in sorted(df["Exercise"].unique()):
+    curr_exercise = df[df["Exercise"] == exercise]
+    figure = px.line(
+      curr_exercise, 
+      x="Date", 
+      y="Weight", 
+      facet_col="Sets", 
+      color="Reps",
+      title=exercise,
+      category_orders={
+        "Sets": sorted(curr_exercise["Sets"].unique()), # Ensures only existing sets are shown
+        "Reps": sorted(df["Reps"].unique()) # Ensures colors are constant between plots
+      },
+      markers=True
+    )
+    exercise_plots.append(dcc.Graph(figure=figure))
+  return exercise_plots
+
 # App layout
 app.layout = html.Div([
     html.H1("Health Dashboard"),
@@ -85,7 +105,15 @@ app.layout = html.Div([
       love it since I can't figure out how to make it dynamic. That said, it gets the job done.
       """
     ),
-    dcc.Graph(figure=fig2)
+    dcc.Graph(figure=fig2),
+    html.H2("Exercise Sets and Reps"),
+    html.P(
+      """
+      This last section is just bookkeeping for me. It's hard to remember how much weight I did
+      last, so I made plots of the individual exercise by set and rep.
+      """
+    ),
+    html.Div(exercise_sets_reps(df))
 ])
 
 @app.callback(
