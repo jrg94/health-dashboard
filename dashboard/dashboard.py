@@ -22,7 +22,7 @@ dropdown = dbc.Row(
             [
                 dcc.Dropdown(
                     ["All Time", "Last Three Months"],
-                    "Last Three Months",
+                    "All Time",
                     id="dropdown"
                 ),
             ],
