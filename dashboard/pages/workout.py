@@ -117,11 +117,12 @@ def update_exercise_sets_reps(dropdown_value):
     curr = time_filter(df, dropdown_value)
     for muscle in sorted(curr["Muscle Groups"].unique()):
         children.append(html.H3(muscle))
+        children.append(html.P(descriptions.get(muscle, "")))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
         for exercise in sorted(curr_muscle["Exercise"].unique()):
             curr_exercise = curr_muscle[curr_muscle["Exercise"] == exercise]
             children.append(html.H4(exercise))
-            children.append(descriptions.get(exercise, ""))
+            children.append(html.P(descriptions.get(exercise, "")))
             difficulty = curr_exercise["Difficulty"].iloc[-1]
             sets = curr_exercise["Sets"].iloc[-1]
             reps = curr_exercise["Reps"].iloc[-1]
