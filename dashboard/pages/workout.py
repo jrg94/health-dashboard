@@ -47,6 +47,15 @@ fig = px.bar(fatigue, y="Cumulative Volume / Average Project 1RM")
 # Setup layout
 layout = html.Div(
     [
+        html.H2("Exercise Sets and Reps"),
+        html.P
+        (
+            """
+            This last section is just bookkeeping for me. It's hard to remember how much weight I did
+            last, so I made plots of the individual exercise by set and rep.
+            """
+        ),
+        dbc.Accordion(id="exercise-sets-reps", class_name="p-2"),
         html.H2("Muscle Fatigue"),
         html.P
         (
@@ -60,15 +69,6 @@ layout = html.Div(
             """
         ),
         dcc.Graph(figure=fig),
-        html.H2("Exercise Sets and Reps"),
-        html.P
-        (
-            """
-            This last section is just bookkeeping for me. It's hard to remember how much weight I did
-            last, so I made plots of the individual exercise by set and rep.
-            """
-        ),
-        html.Div(id="exercise-sets-reps"),
     ]
 )
 
@@ -113,9 +113,10 @@ def plot_exercise_sets_reps(df: pd.DataFrame, window: str, muscle: str, exercise
 
 @callback(Output("exercise-sets-reps", "children"), Input("dropdown", "value"))
 def update_exercise_sets_reps(dropdown_value):
-    children = []
+    items = []
     curr = time_filter(df, dropdown_value)
     for muscle in sorted(curr["Muscle Groups"].unique()):
+        children = []
         children.append(html.H3(muscle))
         children.append(html.P(descriptions.get(muscle, "")))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
@@ -145,4 +146,5 @@ def update_exercise_sets_reps(dropdown_value):
                 exercise
             )
             children.append(dcc.Graph(figure=figure))
-    return children
+        items.append(dbc.AccordionItem(children=children, title=muscle))
+    return items
