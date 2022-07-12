@@ -20,6 +20,9 @@ days = df.groupby("Date").agg({"Exercise": "count"}).reset_index()
 fig2 = calplot(days, x="Date", y="Exercise",
                colorscale="blues", years_title=True)
 
+# Layout constants
+accordion_height = 50 * len(df["Muscle Groups"].unique())
+
 layout = html.Div([
     html.H2("Lift Volume"),
     html.P(
@@ -30,10 +33,9 @@ layout = html.Div([
       """
     ),
     dbc.Spinner(
-        dbc.Accordion(id="exercise-volume-over-time", class_name="pb-3"),
+        dbc.Accordion(id="exercise-volume-over-time", class_name="pb-3", style={"min-height": "60px"}),
         color="primary",
-        type="grow",
-        size="md"
+        spinner_style={"height": "50px", "width": "50px"}
     ),
     html.H2("Projected One Rep Maximum"),
     html.P(
@@ -47,10 +49,9 @@ layout = html.Div([
       """
     ),
     dbc.Spinner(
-        dbc.Accordion(id="1rm-over-time", class_name="pb-3"),
+        dbc.Accordion(id="1rm-over-time", class_name="pb-3", style={"min-height": "60px"}),
         color="primary",
-        type="grow",
-        size="md"
+        spinner_style={"height": "50px", "width": "50px"}
     ),
     html.H2("Calendar View"),
     html.P(

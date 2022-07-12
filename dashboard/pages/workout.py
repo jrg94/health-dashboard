@@ -55,10 +55,10 @@ layout = html.Div(
             """
         ),
         dbc.Spinner(
-            dbc.Accordion(id="exercise-sets-reps", class_name="pb-3"),
+            dbc.Accordion(id="exercise-sets-reps",
+                          class_name="pb-3", style={"min-height": "60px"}),
             color="primary",
-            type="grow",
-            size="md"
+            spinner_style={"height": "50px", "width": "50px"}
         ),
         html.H2("Muscle Fatigue"),
         html.P
