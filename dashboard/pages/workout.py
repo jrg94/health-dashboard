@@ -55,7 +55,12 @@ layout = html.Div(
             last, so I made plots of the individual exercise by set and rep.
             """
         ),
-        dbc.Accordion(id="exercise-sets-reps", class_name="p-2"),
+        dbc.Spinner(
+            dbc.Accordion(id="exercise-sets-reps", class_name="pb-3"),
+            color="primary",
+            type="grow",
+            size="md"
+        ),
         html.H2("Muscle Fatigue"),
         html.P
         (
