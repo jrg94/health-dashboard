@@ -1,11 +1,11 @@
 import datetime
+
 import dash
-from dash import html, dcc, callback, Input, Output
+import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
-import dash_bootstrap_components as dbc
 from constants import *
-
+from dash import Input, Output, callback, dcc, html
 
 dash.register_page(__name__)
 
