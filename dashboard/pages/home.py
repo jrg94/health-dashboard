@@ -47,7 +47,12 @@ layout = html.Div([
       failure. 
       """
     ),
-    dcc.Graph(id="1rm-over-time", className="custom-height"),
+    dbc.Spinner(
+        dbc.Accordion(id="1rm-over-time", class_name="pb-3"),
+        color="primary",
+        type="grow",
+        size="md"
+    ),
     html.H2("Calendar View"),
     html.P(
         """
@@ -97,23 +102,33 @@ def update_exercise_volume(dropdown_value):
 
 
 @callback(
-    Output("1rm-over-time", "figure"),
+    Output("1rm-over-time", "children"),
     Input("dropdown", "value")
 )
 def update_1rm(dropdown_value):
-    display_order = {"Muscle Groups": sorted(
-        df["Muscle Groups"].unique()), "Exercise": sorted(df["Exercise"].unique())}
+    items = []
     curr = df
     if dropdown_value == "Last Three Months":
         curr = df[df["Date"] >= datetime.date.today() -
                   pd.offsets.MonthBegin(3)]
-    return px.line(
-        curr,
-        x="Date",
-        y="Projected 1RM",
-        color="Exercise",
-        facet_col="Muscle Groups",
-        facet_col_wrap=2,
-        title="Projected 1RM by Muscle Group: All Time",
-        category_orders=display_order
-    )
+    for muscle in sorted(curr["Muscle Groups"].unique()):
+        children = []
+        children.append(html.H3(muscle))
+        children.append(html.P(descriptions.get(muscle, "")))
+        curr_muscle = curr[curr["Muscle Groups"] == muscle]
+        display_order = {"Exercise": sorted(curr_muscle["Exercise"].unique())}
+        children.append(
+            dcc.Graph(
+                figure=px.line(
+                    curr_muscle,
+                    x="Date",
+                    y="Projected 1RM",
+                    color="Exercise",
+                    title="Projected 1RM by Muscle Group: All Time",
+                    category_orders=display_order,
+                    markers=True,
+                )
+            )
+        )
+        items.append(dbc.AccordionItem(children, title=muscle))
+    return items
