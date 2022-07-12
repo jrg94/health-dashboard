@@ -1,6 +1,5 @@
 import datetime
 
-import utils.constants as c
 import dash
 import dash_bootstrap_components as dbc
 import pandas as pd
