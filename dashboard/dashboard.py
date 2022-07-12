@@ -2,7 +2,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 
-from .constants import *
+import constants
 
 # App initialization
 app = dash.Dash(
@@ -52,7 +52,7 @@ navlinks = dbc.Nav(
 logo = html.A(
     dbc.Row(
         [
-            dbc.Col(html.Img(src=TRC_LOGO, height="30px")),
+            dbc.Col(html.Img(src=constants.TRC_LOGO, height="30px")),
             dbc.Col(dbc.NavbarBrand(
                 "Grifski Health Dashboard", className="ms-2")),
         ],
