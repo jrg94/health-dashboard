@@ -1,8 +1,8 @@
 import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html
+from constants import *
 
-TRC_LOGO = "https://avatars.githubusercontent.com/u/42280715"
 
 # App initialization
 app = dash.Dash(

@@ -4,20 +4,7 @@ from dash import html, dcc, callback, Input, Output
 import pandas as pd
 import plotly.express as px
 import dash_bootstrap_components as dbc
-
-
-descriptions = {
-    "Back":
-        """
-        To me, the back is a generic muscle group mainly referring to the traps. 
-        """,
-    "Dumbbell Rows":
-        """
-        Dumbell rows are traditional rows that are performed bent over using a single arm at a time,
-        at least that's how I do them. In short, I usually just bend down with one hand on a
-        surface and the other pulling the weight toward me from the ground.
-        """,
-}
+from constants import *
 
 
 dash.register_page(__name__)
@@ -145,9 +132,9 @@ def update_exercise_sets_reps(dropdown_value):
                 )
             )
             figure = plot_exercise_sets_reps(
-                df, 
-                dropdown_value, 
-                muscle, 
+                df,
+                dropdown_value,
+                muscle,
                 exercise
             )
             children.append(dcc.Graph(figure=figure))
