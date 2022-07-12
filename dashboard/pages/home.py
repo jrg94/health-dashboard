@@ -10,7 +10,7 @@ from plotly_calplot import calplot
 dash.register_page(__name__, path="/")
 
 # Load data
-df = pd.read_csv("dashboard/data/exercises.csv")
+df = pd.read_csv("https://raw.githubusercontent.com/jrg94/personal-data/main/health/weight-lifting.csv")
 df["Date"] = pd.to_datetime(df["Date"])
 df["Volume"] = df["Weight"] * df["Total Reps"]
 df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
