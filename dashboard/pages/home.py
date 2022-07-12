@@ -88,7 +88,7 @@ def update_exercise_volume(dropdown_value):
                     x="Date",
                     y="Volume",
                     color="Exercise",
-                    title="Lift Volume by Muscle Group: All Time",
+                    title=f"Lift Volume by Muscle Group: {dropdown_value}",
                     category_orders=display_order,
                     markers=True,
                 )
@@ -122,7 +122,7 @@ def update_1rm(dropdown_value):
                     x="Date",
                     y="Projected 1RM",
                     color="Exercise",
-                    title="Projected 1RM by Muscle Group: All Time",
+                    title=f"Projected 1RM by Muscle Group: {dropdown_value}",
                     category_orders=display_order,
                     markers=True,
                 )
