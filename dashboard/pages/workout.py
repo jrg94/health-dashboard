@@ -1,10 +1,10 @@
 import datetime
 
+import utils.constants as c
 import dash
 import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
-import constants
 from dash import Input, Output, callback, dcc, html
 
 dash.register_page(__name__)
@@ -110,12 +110,12 @@ def update_exercise_sets_reps(dropdown_value):
     for muscle in sorted(curr["Muscle Groups"].unique()):
         children = []
         children.append(html.H3(muscle))
-        children.append(html.P(constants.descriptions.get(muscle, "")))
+        children.append(html.P(c.descriptions.get(muscle, "")))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
         for exercise in sorted(curr_muscle["Exercise"].unique()):
             curr_exercise = curr_muscle[curr_muscle["Exercise"] == exercise]
             children.append(html.H4(exercise))
-            children.append(html.P(constants.descriptions.get(exercise, "")))
+            children.append(html.P(c.descriptions.get(exercise, "")))
             difficulty = curr_exercise["Difficulty"].iloc[-1]
             sets = curr_exercise["Sets"].iloc[-1]
             reps = curr_exercise["Reps"].iloc[-1]
