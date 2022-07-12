@@ -7,6 +7,19 @@ import pandas as pd
 import plotly.express as px
 from dash import Input, Output, callback, dcc, html
 
+descriptions = {
+    "Back":
+        """
+        To me, the back is a generic muscle group mainly referring to the traps. 
+        """,
+    "Dumbbell Rows":
+        """
+        Dumbell rows are traditional rows that are performed bent over using a single arm at a time,
+        at least that's how I do them. In short, I usually just bend down with one hand on a
+        surface and the other pulling the weight toward me from the ground.
+        """,
+}
+
 dash.register_page(__name__)
 
 # Load data
@@ -110,12 +123,12 @@ def update_exercise_sets_reps(dropdown_value):
     for muscle in sorted(curr["Muscle Groups"].unique()):
         children = []
         children.append(html.H3(muscle))
-        children.append(html.P(c.descriptions.get(muscle, "")))
+        children.append(html.P(descriptions.get(muscle, "")))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
         for exercise in sorted(curr_muscle["Exercise"].unique()):
             curr_exercise = curr_muscle[curr_muscle["Exercise"] == exercise]
             children.append(html.H4(exercise))
-            children.append(html.P(c.descriptions.get(exercise, "")))
+            children.append(html.P(descriptions.get(exercise, "")))
             difficulty = curr_exercise["Difficulty"].iloc[-1]
             sets = curr_exercise["Sets"].iloc[-1]
             reps = curr_exercise["Reps"].iloc[-1]
