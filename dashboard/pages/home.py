@@ -78,7 +78,6 @@ def update_exercise_volume(dropdown_value):
     for muscle in sorted(curr["Muscle Groups"].unique()):
         children = []
         children.append(html.H3(muscle))
-        children.append(html.P(descriptions.get(muscle, "")))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
         display_order = {"Exercise": sorted(curr_muscle["Exercise"].unique())}
         children.append(
@@ -114,7 +113,6 @@ def update_1rm(dropdown_value):
     for muscle in sorted(curr["Muscle Groups"].unique()):
         children = []
         children.append(html.H3(muscle))
-        children.append(html.P(descriptions.get(muscle, "")))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
         display_order = {"Exercise": sorted(curr_muscle["Exercise"].unique())}
         children.append(
