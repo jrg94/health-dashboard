@@ -4,7 +4,7 @@ import dash
 import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
-from constants import *
+from dashboard.constants import *
 from dash import Input, Output, callback, dcc, html
 
 dash.register_page(__name__)
