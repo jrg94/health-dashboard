@@ -2,7 +2,7 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 
-from constants import *
+from .constants import *
 
 # App initialization
 app = dash.Dash(
