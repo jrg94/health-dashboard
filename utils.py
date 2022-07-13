@@ -2,6 +2,7 @@ import datetime
 
 import pandas as pd
 import plotly.express as px
+import dash_bootstrap_components as dbc
 
 
 def load_data():
@@ -14,6 +15,7 @@ def load_data():
     df["Date"] = pd.to_datetime(df["Date"])
     df["Volume"] = df["Weight"] * df["Total Reps"]
     df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
+    df["Per Arm"] = df["Per Arm"].map({True: "Yes", False: "No"})
     return df
 
 
@@ -54,3 +56,16 @@ def plot_exercise_sets_reps(df: pd.DataFrame, window: str, muscle: str, exercise
         symbol="Per Arm"
     )
     return figure
+
+def create_recent_exercises_table(df: pd.DataFrame, muscle: str, exercise: str):
+    """
+    Creates a nice table of the recent sets by reps for a given exercise. 
+    
+    :param df: the complete dataset
+    :param muscle: the muscle group to filter by
+    :param exercise: the exercise to filter by
+    """
+    temp = df[(df["Muscle Groups"] == muscle) & (df["Exercise"] == exercise)].groupby(["Sets", "Reps"]).last()
+    temp.drop(df.columns.difference(["Sets", "Reps", "Per Arm", "Weight", "Difficulty"]), axis=1, inplace=True)
+    table = dbc.Table.from_dataframe(temp, striped=True, bordered=True, hover=True, index=True)
+    return table

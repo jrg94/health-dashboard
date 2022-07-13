@@ -85,30 +85,15 @@ def update_exercise_sets_reps(dropdown_value):
         children.append(html.P(constants.descriptions.get(muscle, "")))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
         for exercise in sorted(curr_muscle["Exercise"].unique()):
-            curr_exercise = curr_muscle[curr_muscle["Exercise"] == exercise]
             children.append(html.H4(exercise))
             children.append(html.P(constants.descriptions.get(exercise, "")))
-            difficulty = curr_exercise["Difficulty"].iloc[-1]
-            sets = curr_exercise["Sets"].iloc[-1]
-            reps = curr_exercise["Reps"].iloc[-1]
-            weight = curr_exercise["Weight"].iloc[-1]
-            children.append(
-                html.P(
-                    [
-                        f"Last time I did a set (",
-                        html.B(f"{sets}x{reps}x{weight}"),
-                        "), I described it as ",
-                        html.B(f"{difficulty}"),
-                        ".",
-                    ]
-                )
-            )
             figure = utils.plot_exercise_sets_reps(
                 df,
                 dropdown_value,
                 muscle,
                 exercise
             )
+            children.append(utils.create_recent_exercises_table(df, muscle, exercise))
             children.append(dcc.Graph(figure=figure))
         items.append(dbc.AccordionItem(children=children, title=muscle))
     return items
