@@ -12,7 +12,6 @@ import utils
 )
 def update_exercise_volume(dropdown_value):
     items = []
-    curr = utils.load_data()
     df = utils.load_data()
     curr = utils.time_filter(df, dropdown_value)
     for muscle in sorted(curr["Muscle Groups"].unique()):
