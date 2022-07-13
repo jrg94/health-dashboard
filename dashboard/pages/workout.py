@@ -6,6 +6,10 @@ import pandas as pd
 import plotly.express as px
 from dash import Input, Output, callback, dcc, html
 
+# Setup page
+dash.register_page(__name__)
+
+# Declare global data
 descriptions = {
     "Back":
         """
@@ -19,62 +23,79 @@ descriptions = {
         """,
 }
 
-dash.register_page(__name__)
 
-# Load data
-df = pd.read_csv("https://raw.githubusercontent.com/jrg94/personal-data/main/health/weightlifting.csv")
-df["Date"] = pd.to_datetime(df["Date"])
-df["Volume"] = df["Weight"] * df["Total Reps"]
-df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
+def load_data():
+    """
+    A helper function for getting the data in some decent state. 
+    """
+    df = pd.read_csv("https://raw.githubusercontent.com/jrg94/personal-data/main/health/weightlifting.csv")
+    df["Date"] = pd.to_datetime(df["Date"])
+    df["Volume"] = df["Weight"] * df["Total Reps"]
+    df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
+    return df
 
-# Create plots
-fatigue = (
-    df[df["Date"] >= datetime.date.today() - pd.offsets.Day(2)]
-    .groupby("Muscle Groups")
-    .agg({"Volume": "sum", "Projected 1RM": "mean"})
-)
-missing = set(df["Muscle Groups"].unique()) - set(fatigue.index)
-fatigue["Cumulative Volume / Average Project 1RM"] = (
-    fatigue["Volume"] / fatigue["Projected 1RM"]
-)
-for muscle in missing:
-    fatigue.loc[muscle] = 0
-fatigue = fatigue.sort_values(
-    "Cumulative Volume / Average Project 1RM", ascending=True)
-fig = px.bar(fatigue, y="Cumulative Volume / Average Project 1RM")
 
-# Setup layout
-layout = html.Div(
-    [
-        html.H2("Exercise Sets and Reps"),
-        html.P
-        (
-            """
-            This last section is just bookkeeping for me. It's hard to remember how much weight I did
-            last, so I made plots of the individual exercise by set and rep.
-            """
-        ),
-        dbc.Spinner(
-            dbc.Accordion(id="exercise-sets-reps",
-                          class_name="pb-3", style={"min-height": "60px"}),
-            color="primary",
-            spinner_style={"height": "50px", "width": "50px"}
-        ),
-        html.H2("Muscle Fatigue"),
-        html.P
-        (
-            """
-            Muscle fatigue is a metric that I use to track how much muscle I've used in the
-            past 48 hours. It's a bit rudimentary, but basically I compute a ratio of muscle 
-            group volume (sum) against the projected 1RM (mean). This is a pretty sloppy metric 
-            since I don't find 1RM very accurate and the aggregate functions are somewhat misleading, 
-            but I don't really think it needs to be that accurate. Regardless, it's not like I have
-            a scientific way of assessing fatique anyway.
-            """
-        ),
-        dcc.Graph(figure=fig),
-    ]
-)
+def serve_layout():
+    """
+    Creates the page layout when the page loads. This function only exists to ensure that data in the
+    dataframe is fresh on reload. 
+    
+    :return: the page layout
+    """
+
+    # Load data
+    df = load_data()
+
+    # Create plots
+    fatigue = (
+        df[df["Date"] >= datetime.date.today() - pd.offsets.Day(2)]
+        .groupby("Muscle Groups")
+        .agg({"Volume": "sum", "Projected 1RM": "mean"})
+    )
+    missing = set(df["Muscle Groups"].unique()) - set(fatigue.index)
+    fatigue["Cumulative Volume / Average Project 1RM"] = (
+        fatigue["Volume"] / fatigue["Projected 1RM"]
+    )
+    for muscle in missing:
+        fatigue.loc[muscle] = 0
+    fatigue = fatigue.sort_values(
+        "Cumulative Volume / Average Project 1RM", ascending=True)
+    fig = px.bar(fatigue, y="Cumulative Volume / Average Project 1RM")
+
+    # Setup layout
+    layout = html.Div(
+        [
+            html.H2("Exercise Sets and Reps"),
+            html.P
+            (
+                """
+                This last section is just bookkeeping for me. It's hard to remember how much weight I did
+                last, so I made plots of the individual exercise by set and rep.
+                """
+            ),
+            dbc.Spinner(
+                dbc.Accordion(id="exercise-sets-reps",
+                              class_name="pb-3", style={"min-height": "60px"}),
+                color="primary",
+                spinner_style={"height": "50px", "width": "50px"}
+            ),
+            html.H2("Muscle Fatigue"),
+            html.P
+            (
+                """
+                Muscle fatigue is a metric that I use to track how much muscle I've used in the
+                past 48 hours. It's a bit rudimentary, but basically I compute a ratio of muscle 
+                group volume (sum) against the projected 1RM (mean). This is a pretty sloppy metric 
+                since I don't find 1RM very accurate and the aggregate functions are somewhat misleading, 
+                but I don't really think it needs to be that accurate. Regardless, it's not like I have
+                a scientific way of assessing fatique anyway.
+                """
+            ),
+            dcc.Graph(figure=fig),
+        ]
+    )
+
+    return layout
 
 
 def time_filter(df: pd.DataFrame, window: str):
@@ -153,3 +174,7 @@ def update_exercise_sets_reps(dropdown_value):
             children.append(dcc.Graph(figure=figure))
         items.append(dbc.AccordionItem(children=children, title=muscle))
     return items
+
+# Setup page
+df = load_data()
+layout = serve_layout
