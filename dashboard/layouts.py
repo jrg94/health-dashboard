@@ -1,9 +1,11 @@
 import datetime
-from dash import dcc, html
+
 import dash_bootstrap_components as dbc
 import pandas as pd
-from plotly_calplot import calplot
 import plotly.express as px
+from dash import dcc, html
+from plotly_calplot import calplot
+
 import utils
 
 # Load data

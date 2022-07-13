@@ -1,8 +1,9 @@
 import dash
 import dash_bootstrap_components as dbc
-from dash import dcc, html, callback, Output, Input
-from layouts import home_layout, workout_layout
+from dash import Input, Output, callback, dcc, html
+
 import callbacks
+from layouts import home_layout, workout_layout
 
 TRC_LOGO = "https://avatars.githubusercontent.com/u/42280715"
 
@@ -59,7 +60,7 @@ logo = html.A(
         [
             dbc.Col(html.Img(src=TRC_LOGO, height="30px")),
             dbc.Col(
-                    dbc.NavbarBrand("Grifski Health Dashboard", className="ms-2")
+                dbc.NavbarBrand("Grifski Health Dashboard", className="ms-2")
             ),
         ],
         align="center",
@@ -92,6 +93,7 @@ app.layout = dbc.Container([
     html.Div(id="page-content")
 ])
 
+
 @callback(
     Output("page-content", "children"),
     Input("url", "pathname")
@@ -103,6 +105,7 @@ def display_page(pathname):
         return workout_layout
     else:
         return "404"
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
