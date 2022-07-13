@@ -10,7 +10,7 @@ from plotly_calplot import calplot
 dash.register_page(__name__, path="/")
 
 # Load data
-df = pd.read_csv("https://raw.githubusercontent.com/jrg94/personal-data/main/health/weight-lifting.csv")
+df = pd.read_csv("https://raw.githubusercontent.com/jrg94/personal-data/main/health/weightlifting.csv")
 df["Date"] = pd.to_datetime(df["Date"])
 df["Volume"] = df["Weight"] * df["Total Reps"]
 df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
@@ -91,6 +91,7 @@ def update_exercise_volume(dropdown_value):
                     title=f"Lift Volume by Muscle Group: {dropdown_value}",
                     category_orders=display_order,
                     markers=True,
+                    symbol="Per Arm"
                 )
             )
         )
@@ -125,6 +126,7 @@ def update_1rm(dropdown_value):
                     title=f"Projected 1RM by Muscle Group: {dropdown_value}",
                     category_orders=display_order,
                     markers=True,
+                    symbol="Per Arm"
                 )
             )
         )

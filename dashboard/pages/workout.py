@@ -22,7 +22,7 @@ descriptions = {
 dash.register_page(__name__)
 
 # Load data
-df = pd.read_csv("https://raw.githubusercontent.com/jrg94/personal-data/main/health/weight-lifting.csv")
+df = pd.read_csv("https://raw.githubusercontent.com/jrg94/personal-data/main/health/weightlifting.csv")
 df["Date"] = pd.to_datetime(df["Date"])
 df["Volume"] = df["Weight"] * df["Total Reps"]
 df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
@@ -111,6 +111,7 @@ def plot_exercise_sets_reps(df: pd.DataFrame, window: str, muscle: str, exercise
             "Reps": sorted(df["Reps"].unique()),
         },
         markers=True,
+        symbol="Per Arm"
     )
     return figure
 
