@@ -13,6 +13,13 @@ workout_constants = {
             surface and the other pulling the weight toward me from the ground.
             """,
         "src": "https://www.youtube.com/embed/4ZpQb1kX7Ew",
-    }
-        
+    },
+    "Russian Twists": {
+        "description": 
+            """
+            Russian twists are an ab exercise that involves sitting on the ground and
+            twisting with some weight in hand.
+            """,
+        "src": "https://www.youtube.com/embed/Tau0hsW8iR0"
+    }   
 }
