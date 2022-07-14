@@ -1,8 +1,9 @@
 import datetime
 
+import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
-import dash_bootstrap_components as dbc
+from dash import html
 
 
 def load_data():
@@ -57,15 +58,45 @@ def plot_exercise_sets_reps(df: pd.DataFrame, window: str, muscle: str, exercise
     )
     return figure
 
+
 def create_recent_exercises_table(df: pd.DataFrame, muscle: str, exercise: str):
     """
     Creates a nice table of the recent sets by reps for a given exercise. 
-    
+
     :param df: the complete dataset
     :param muscle: the muscle group to filter by
     :param exercise: the exercise to filter by
     """
-    temp = df[(df["Muscle Groups"] == muscle) & (df["Exercise"] == exercise)].groupby(["Sets", "Reps"]).last()
-    temp.drop(df.columns.difference(["Sets", "Reps", "Per Arm", "Weight", "Difficulty"]), axis=1, inplace=True)
-    table = dbc.Table.from_dataframe(temp, striped=True, bordered=True, hover=True, index=True)
+    temp = df[(df["Muscle Groups"] == muscle) & (
+        df["Exercise"] == exercise)].groupby(["Sets", "Reps"]).last()
+    temp.drop(df.columns.difference(
+        ["Sets", "Reps", "Per Arm", "Weight", "Difficulty"]), axis=1, inplace=True)
+    table = dbc.Table.from_dataframe(
+        temp, striped=True, bordered=True, hover=True, index=True)
     return table
+
+
+def create_video_description_row(exercise_constants: dict):
+    """
+    Creates a row that contains the exercise video and its description.
+    
+    :param exercise_constants: the constants for the exercise
+    """
+    if "src" in exercise_constants:
+        return dbc.Row(
+            [
+                dbc.Col(
+                    html.Iframe(
+                        src=exercise_constants.get("src", ""),
+                        style={"width": "560px", "height": "315px"}
+                    ),
+                    width="auto"
+                ),
+                dbc.Col(html.P(exercise_constants.get("description", "")))
+            ],
+            class_name="justify-content-start"
+        )
+    else:
+        return dbc.Row(
+            dbc.Col(html.P(exercise_constants.get("description", "")))
+        )

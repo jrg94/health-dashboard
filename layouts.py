@@ -68,7 +68,7 @@ home_layout = html.Div([
     ),
     dbc.Spinner(
         dbc.Accordion(id="1rm-over-time", class_name="pb-3",
-                      style={"min-height": "60px"}),
+                      style={"minHeight": "60px"}),
         color="primary",
         spinner_style={"height": "50px", "width": "50px"}
     ),
@@ -95,7 +95,7 @@ workout_layout = html.Div(
         ),
         dbc.Spinner(
             dbc.Accordion(id="exercise-sets-reps",
-                          class_name="pb-3", style={"min-height": "60px"}),
+                          class_name="pb-3", style={"minHeight": "60px"}),
             color="primary",
             spinner_style={"height": "50px", "width": "50px"}
         ),

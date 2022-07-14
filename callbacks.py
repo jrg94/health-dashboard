@@ -81,19 +81,24 @@ def update_exercise_sets_reps(dropdown_value):
     curr = utils.time_filter(df, dropdown_value)
     for muscle in sorted(curr["Muscle Groups"].unique()):
         children = []
+        tabs = []
         children.append(html.H3(muscle))
-        children.append(html.P(constants.descriptions.get(muscle, "")))
+        children.append(html.P(constants.workout_constants.get(muscle, {}).get("description", "")))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
         for exercise in sorted(curr_muscle["Exercise"].unique()):
-            children.append(html.H4(exercise))
-            children.append(html.P(constants.descriptions.get(exercise, "")))
+            tab_children = []
+            tab_children.append(html.H4(exercise))
+            exercise_constants = constants.workout_constants.get(exercise, {})
+            tab_children.append(utils.create_video_description_row(exercise_constants))
             figure = utils.plot_exercise_sets_reps(
                 df,
                 dropdown_value,
                 muscle,
                 exercise
             )
-            children.append(utils.create_recent_exercises_table(df, muscle, exercise))
-            children.append(dcc.Graph(figure=figure))
+            tab_children.append(utils.create_recent_exercises_table(df, muscle, exercise))
+            tab_children.append(dcc.Graph(figure=figure))
+            tabs.append(dbc.Tab(tab_children, label=exercise))
+        children.append(dbc.Tabs(tabs))
         items.append(dbc.AccordionItem(children=children, title=muscle))
     return items
