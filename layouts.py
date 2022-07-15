@@ -37,15 +37,28 @@ fig2 = calplot(
     years_title=True
 )
 
+muscle_groups = df.groupby(["Date", "Muscle Groups"]).agg({"Volume": "sum"}).reset_index()
+fig3 = px.scatter(
+    muscle_groups,
+    x="Date",
+    y="Volume",
+    color="Muscle Groups",
+    labels={"Volume": "Volume (lbs)"}
+)
+
 home_layout = html.Div([
     html.H2("Lift Volume"),
     html.P(
         """
         For the sake of tracking, I define lift volume as the weight of the lift multiplied by 
         the number of total reps across all sets. Volumes are computed for all exercises and
-        are grouped by muscle below. 
+        are grouped by muscle below. Given the noisiness of the data, I use a pretty relaxed
+        fit line to show the overall trends of the data (lowess=.8). If you're interested in
+        a quick overview of the data, I summed the volumes by muscle group and plotted them by
+        time below.
         """
     ),
+    dcc.Graph(figure=fig3),
     dbc.Spinner(
         dbc.Accordion(
             id="exercise-volume-over-time",
@@ -63,11 +76,10 @@ home_layout = html.Div([
         This is a more useful metric for tracking progress than volume
         because it gives you a better idea how how you're building muscle.
         Plots are still somewhat erratic because I don't always lift to
-        failure. To make the chart a bit easier to read, I use an expanding
-        maximum which is a line that basically always trends up. That way, 
-        easy days don't effect my actual projected 1RM. In reality, the
-        trendline represents my peak 1RM, so it's not something I'd ever
-        attempt.
+        failure, so I opted for an expanding maximum trendline which is a 
+        line that basically always trends up. That way, easy days don't 
+        affect my actual projected 1RM. In reality, the trendline represents 
+        my peak 1RM, so it's not something I'd ever attempt.
         """
     ),
     dbc.Spinner(

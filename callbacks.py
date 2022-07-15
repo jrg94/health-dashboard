@@ -19,24 +19,22 @@ def update_exercise_volume(dropdown_value):
         children.append(html.H3(muscle))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
         display_order = {"Exercise": sorted(curr_muscle["Exercise"].unique())}
-        children.append(
-            dcc.Graph(
-                id=f"{muscle}-volume-over-time",
-                figure=px.line(
-                    curr_muscle,
-                    x="Date",
-                    y="Volume",
-                    color="Exercise",
-                    title=f"Lift Volume by Muscle Group: {dropdown_value}",
-                    category_orders=display_order,
-                    markers=True,
-                    symbol="Per Arm",
-                )
-            )
+        figure=px.scatter(
+            curr_muscle,
+            x="Date",
+            y="Volume",
+            color="Exercise",
+            title=f"Lift Volume by Muscle Group: {dropdown_value}",
+            category_orders=display_order,
+            #markers=True,
+            symbol="Per Arm",
+            trendline="lowess",
+            trendline_options=dict(frac=.8)
         )
-        items.append(
-            dbc.AccordionItem(children, title=muscle)
-        )
+        figure.data = [t for t in figure.data if t.mode == "lines"]
+        figure.update_traces(showlegend=True) 
+        children.append(dcc.Graph(figure=figure))
+        items.append(dbc.AccordionItem(children, title=muscle))
     return items
 
 
