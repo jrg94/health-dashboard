@@ -26,10 +26,8 @@ def update_exercise_volume(dropdown_value):
             color="Exercise",
             title=f"Lift Volume by Muscle Group: {dropdown_value}",
             category_orders=display_order,
-            #markers=True,
             symbol="Per Arm",
-            trendline="lowess",
-            trendline_options=dict(frac=.8)
+            trendline="lowess"
         )
         figure.data = [t for t in figure.data if t.mode == "lines"]
         figure.update_traces(showlegend=True) 

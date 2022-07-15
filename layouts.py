@@ -44,7 +44,7 @@ home_layout = html.Div([
         For the sake of tracking, I define lift volume as the weight of the lift multiplied by 
         the number of total reps across all sets. Volumes are computed for all exercises and
         are grouped by muscle below. Given the noisiness of the data, I use a pretty relaxed
-        fit line to show the overall trends of the data (lowess=.8). If you're interested in
+        fit line to show the overall trends of the data (lowess=default). If you're interested in
         a quick overview of the data, I summed the volumes for every single exercise below.
         Colors are obviously duplicated, but you can double click the legend to single any
         one exercise out. 
