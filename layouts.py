@@ -37,13 +37,21 @@ fig2 = calplot(
     years_title=True
 )
 
-muscle_groups = df.groupby(["Date", "Muscle Groups"]).agg({"Volume": "sum"}).reset_index()
+exercise_groups = df.groupby(["Date", "Exercise"]).agg({"Volume": "sum", "Projected 1RM": "max"}).reset_index()
 fig3 = px.scatter(
-    muscle_groups,
+    exercise_groups,
     x="Date",
     y="Volume",
-    color="Muscle Groups",
+    color="Exercise",
     labels={"Volume": "Volume (lbs)"}
+)
+
+fig4 = px.scatter(
+    exercise_groups,
+    x="Date",
+    y="Projected 1RM",
+    color="Exercise",
+    labels={"Projected 1RM": "Maximum Projected 1RM (lbs)"}
 )
 
 home_layout = html.Div([
@@ -54,8 +62,9 @@ home_layout = html.Div([
         the number of total reps across all sets. Volumes are computed for all exercises and
         are grouped by muscle below. Given the noisiness of the data, I use a pretty relaxed
         fit line to show the overall trends of the data (lowess=.8). If you're interested in
-        a quick overview of the data, I summed the volumes by muscle group and plotted them by
-        time below.
+        a quick overview of the data, I summed the volumes for every single exercise below.
+        Colors are obviously duplicated, but you can double click the legend to single any
+        one exercise out. 
         """
     ),
     dcc.Graph(figure=fig3),
@@ -79,9 +88,12 @@ home_layout = html.Div([
         failure, so I opted for an expanding maximum trendline which is a 
         line that basically always trends up. That way, easy days don't 
         affect my actual projected 1RM. In reality, the trendline represents 
-        my peak 1RM, so it's not something I'd ever attempt.
+        my peak 1RM, so it's not something I'd ever attempt. As with volume,
+        there's also a quick overview plot here. Same rules apply. Only
+        difference is that the points are maxed rather than summed.
         """
     ),
+    dcc.Graph(figure=fig4),
     dbc.Spinner(
         dbc.Accordion(id="1rm-over-time", class_name="pb-3",
                       style={"minHeight": "60px"}),
