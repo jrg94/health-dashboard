@@ -58,13 +58,17 @@ home_layout = html.Div([
     html.H2("Projected One Rep Maximum"),
     html.P(
         """
-            Projected 1RM is computed by using the standard 1RM formula to
-            determine the maximum amount of weight you could probably lift. 
-            This is a more useful metric for tracking progress than volume
-            because it gives you a better idea how how you're building muscle.
-            Plots are still somewhat erratic because I don't always lift to
-            failure. 
-            """
+        Projected 1RM is computed by using the standard 1RM formula to
+        determine the maximum amount of weight you could probably lift. 
+        This is a more useful metric for tracking progress than volume
+        because it gives you a better idea how how you're building muscle.
+        Plots are still somewhat erratic because I don't always lift to
+        failure. To make the chart a bit easier to read, I use an expanding
+        maximum which is a line that basically always trends up. That way, 
+        easy days don't effect my actual projected 1RM. In reality, the
+        trendline represents my peak 1RM, so it's not something I'd ever
+        attempt.
+        """
     ),
     dbc.Spinner(
         dbc.Accordion(id="1rm-over-time", class_name="pb-3",

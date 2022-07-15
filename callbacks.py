@@ -30,7 +30,7 @@ def update_exercise_volume(dropdown_value):
                     title=f"Lift Volume by Muscle Group: {dropdown_value}",
                     category_orders=display_order,
                     markers=True,
-                    symbol="Per Arm"
+                    symbol="Per Arm",
                 )
             )
         )
@@ -55,15 +55,16 @@ def update_1rm(dropdown_value):
         display_order = {"Exercise": sorted(curr_muscle["Exercise"].unique())}
         children.append(
             dcc.Graph(
-                figure=px.line(
+                figure=px.scatter(
                     curr_muscle,
                     x="Date",
                     y="Projected 1RM",
                     color="Exercise",
                     title=f"Projected 1RM by Muscle Group: {dropdown_value}",
                     category_orders=display_order,
-                    markers=True,
-                    symbol="Per Arm"
+                    symbol="Per Arm",
+                    trendline="expanding", 
+                    trendline_options=dict(function="max")
                 )
             )
         )
