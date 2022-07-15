@@ -53,21 +53,20 @@ def update_1rm(dropdown_value):
         children.append(html.H3(muscle))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
         display_order = {"Exercise": sorted(curr_muscle["Exercise"].unique())}
-        children.append(
-            dcc.Graph(
-                figure=px.scatter(
-                    curr_muscle,
-                    x="Date",
-                    y="Projected 1RM",
-                    color="Exercise",
-                    title=f"Projected 1RM by Muscle Group: {dropdown_value}",
-                    category_orders=display_order,
-                    symbol="Per Arm",
-                    trendline="expanding", 
-                    trendline_options=dict(function="max")
-                )
-            )
+        figure = px.scatter(
+            curr_muscle,
+            x="Date",
+            y="Projected 1RM",
+            color="Exercise",
+            title=f"Projected 1RM by Muscle Group: {dropdown_value}",
+            category_orders=display_order,
+            symbol="Per Arm",
+            trendline="expanding", 
+            trendline_options=dict(function="max")
         )
+        figure.data = [t for t in figure.data if t.mode == "lines"]
+        figure.update_traces(showlegend=True) 
+        children.append(dcc.Graph(figure=figure))
         items.append(dbc.AccordionItem(children, title=muscle))
     return items
 
