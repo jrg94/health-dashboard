@@ -55,7 +55,6 @@ def plot_exercise_sets_reps(df: pd.DataFrame, window: str, muscle: str, exercise
         },
         markers=True,
         symbol="Per Arm",
-        color_discrete_sequence=px.colors.qualitative.G10
     )
     return figure
 

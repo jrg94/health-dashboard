@@ -1,11 +1,14 @@
 import dash
 import dash_bootstrap_components as dbc
+import plotly.express as px
+import plotly.io as pio
 from dash import Input, Output, callback, dcc, html
 
 import callbacks
 from layouts import home_layout, workout_layout
 
 TRC_LOGO = "https://avatars.githubusercontent.com/u/42280715"
+pio.templates[pio.templates.default].layout.colorway = px.colors.qualitative.G10
 
 # App initialization
 app = dash.Dash(
