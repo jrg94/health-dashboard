@@ -37,23 +37,6 @@ fig2 = calplot(
     years_title=True
 )
 
-exercise_groups = df.groupby(["Date", "Exercise"]).agg({"Volume": "sum", "Projected 1RM": "max"}).reset_index()
-fig3 = px.scatter(
-    exercise_groups,
-    x="Date",
-    y="Volume",
-    color="Exercise",
-    labels={"Volume": "Volume (lbs)"}
-)
-
-fig4 = px.scatter(
-    exercise_groups,
-    x="Date",
-    y="Projected 1RM",
-    color="Exercise",
-    labels={"Projected 1RM": "Maximum Projected 1RM (lbs)"}
-)
-
 home_layout = html.Div([
     html.H2("Lift Volume"),
     html.P(
@@ -67,13 +50,15 @@ home_layout = html.Div([
         one exercise out. 
         """
     ),
-    dcc.Graph(figure=fig3),
     dbc.Spinner(
-        dbc.Accordion(
-            id="exercise-volume-over-time",
-            class_name="pb-3",
-            style={"min-height": "60px"}
-        ),
+        [
+            dcc.Graph(id="volume-overview"),
+            dbc.Accordion(
+                id="exercise-volume-over-time",
+                class_name="pb-3",
+                style={"min-height": "60px"}
+            )
+        ],
         color="primary",
         spinner_style={"height": "50px", "width": "50px"}
     ),
@@ -93,10 +78,15 @@ home_layout = html.Div([
         difference is that the points are maxed rather than summed.
         """
     ),
-    dcc.Graph(figure=fig4),
     dbc.Spinner(
-        dbc.Accordion(id="1rm-over-time", class_name="pb-3",
-                      style={"minHeight": "60px"}),
+        [
+            dcc.Graph(id="projected-1rm-overview"),
+            dbc.Accordion(
+                id="1rm-over-time", 
+                class_name="pb-3",
+                style={"minHeight": "60px"}
+            )
+        ],
         color="primary",
         spinner_style={"height": "50px", "width": "50px"}
     ),

@@ -100,3 +100,28 @@ def update_exercise_sets_reps(dropdown_value):
         children.append(dbc.Tabs(tabs))
         items.append(dbc.AccordionItem(children=children, title=muscle))
     return items
+
+@callback(
+    Output("projected-1rm-overview", "figure"),
+    Output("volume-overview", "figure"),
+    Input("dropdown", "value")
+)
+def homepage_overview_plots(dropdown_value):
+    df = utils.load_data()
+    df = utils.time_filter(df, dropdown_value)
+    exercise_groups = df.groupby(["Date", "Exercise"]).agg({"Volume": "sum", "Projected 1RM": "max"}).reset_index()
+    fig1 = px.scatter(
+        exercise_groups,
+        x="Date",
+        y="Volume",
+        color="Exercise",
+        labels={"Volume": "Volume (lbs)"}
+    )
+    fig2 = px.scatter(
+        exercise_groups,
+        x="Date",
+        y="Projected 1RM",
+        color="Exercise",
+        labels={"Projected 1RM": "Maximum Projected 1RM (lbs)"}
+    )
+    return fig2, fig1
