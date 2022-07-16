@@ -33,9 +33,11 @@ fig2 = calplot(
     days,
     x="Date",
     y="Exercise",
-    colorscale="blues",
-    years_title=True
+    colorscale="greens",
+    years_title=True,
+    showscale=True
 )
+fig2.update_layout(width=None)
 
 home_layout = html.Div([
     html.H2("Lift Volume"),
