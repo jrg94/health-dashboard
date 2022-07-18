@@ -193,7 +193,9 @@ fitbit_layout = html.Div(
             """
             To no one's surprise, the primary use of a Fitbit is to track steps.
             As someone who has been wearing one since 2015, you can really see how
-            my trend in activities changes over time. 
+            my trend in activities changes over time. To get a better feel for the
+            data, I use a rolling mean of 30 days. It gives a nice "monthly" trend
+            line. 
             """
         ),
         dbc.Spinner(

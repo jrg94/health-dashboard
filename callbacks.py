@@ -137,9 +137,12 @@ def homepage_overview_plots(dropdown_value):
 def steps_overview_plot(dropdown_value):
     df = utils.load_data(constants.FITBIT_URL)
     df = utils.time_filter(df, dropdown_value)
-    fig = px.line(
+    fig = px.scatter(
         df,
         x="Date",
         y="Steps",
+        trendline="rolling",
+        trendline_options=dict(window=30, min_periods=1),
+        trendline_color_override=px.colors.qualitative.G10[8]
     )
     return fig
