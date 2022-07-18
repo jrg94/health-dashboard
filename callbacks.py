@@ -12,7 +12,7 @@ import utils
 )
 def update_exercise_volume(dropdown_value):
     items = []
-    df = utils.load_data()
+    df = utils.load_data(constants.WEIGHTLIFTING_URL)
     curr = utils.time_filter(df, dropdown_value)
     for muscle in sorted(curr["Muscle Groups"].unique()):
         children = []
@@ -42,7 +42,7 @@ def update_exercise_volume(dropdown_value):
 )
 def update_1rm(dropdown_value):
     items = []
-    df = utils.load_data()
+    df = utils.load_data(constants.WEIGHTLIFTING_URL)
     curr = utils.time_filter(df, dropdown_value)
     for muscle in sorted(curr["Muscle Groups"].unique()):
         children = []
@@ -73,7 +73,7 @@ def update_1rm(dropdown_value):
 )
 def update_exercise_sets_reps(dropdown_value):
     items = []
-    df = utils.load_data()
+    df = utils.load_data(constants.WEIGHTLIFTING_URL)
     curr = utils.time_filter(df, dropdown_value)
     for muscle in sorted(curr["Muscle Groups"].unique()):
         children = []
@@ -105,7 +105,7 @@ def update_exercise_sets_reps(dropdown_value):
     Input("dropdown", "value")
 )
 def homepage_overview_plots(dropdown_value):
-    df = utils.load_data()
+    df = utils.load_data(constants.WEIGHTLIFTING_URL)
     df = utils.time_filter(df, dropdown_value)
     exercise_groups = df.groupby(["Date", "Exercise"]).agg({"Volume": "sum", "Projected 1RM": "max"}).reset_index()
     fig1 = px.scatter(
@@ -123,3 +123,17 @@ def homepage_overview_plots(dropdown_value):
         labels={"Projected 1RM": "Maximum Projected 1RM (lbs)"}
     )
     return fig2, fig1
+
+@callback(
+    Output("steps-overview", "figure"),
+    Input("dropdown", "value")
+)
+def steps_overview_plot(dropdown_value):
+    df = utils.load_data(constants.FITBIT_URL)
+    df = utils.time_filter(df, dropdown_value)
+    fig = px.line(
+        df,
+        x="Date",
+        y="Steps",
+    )
+    return fig

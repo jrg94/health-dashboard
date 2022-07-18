@@ -5,7 +5,7 @@ import plotly.io as pio
 from dash import Input, Output, callback, dcc, html
 
 import callbacks
-from layouts import home_layout, workout_layout
+from layouts import home_layout, lifting_layout, fitbit_layout
 
 TRC_LOGO = "https://avatars.githubusercontent.com/u/42280715"
 pio.templates[pio.templates.default].layout.colorway = px.colors.qualitative.G10
@@ -49,8 +49,15 @@ navlinks = dbc.Nav(
         ),
         dbc.NavItem(
             dbc.NavLink(
-                [html.Div("Workout")],
-                href="/workout",
+                [html.Div("Lifting")],
+                href="/lifting",
+                active="exact",
+            )
+        ),
+        dbc.NavItem(
+            dbc.NavLink(
+                [html.Div("Fitbit")],
+                href="/fitbit",
                 active="exact",
             )
         )
@@ -104,8 +111,10 @@ app.layout = dbc.Container([
 def display_page(pathname):
     if pathname == "/":
         return home_layout
-    elif pathname == "/workout":
-        return workout_layout
+    elif pathname == "/lifting":
+        return lifting_layout
+    elif pathname == "/fitbit":
+        return fitbit_layout
     else:
         return "404"
 

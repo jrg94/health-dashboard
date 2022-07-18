@@ -23,3 +23,6 @@ workout_constants = {
         "src": "https://www.youtube.com/embed/Tau0hsW8iR0"
     }   
 }
+
+WEIGHTLIFTING_URL = "https://raw.githubusercontent.com/jrg94/personal-data/main/health/weightlifting.csv"
+FITBIT_URL = "https://raw.githubusercontent.com/jrg94/personal-data/main/health/fitbit.csv"

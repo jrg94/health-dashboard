@@ -4,19 +4,18 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
 from dash import html
+import constants
 
-
-def load_data():
+def load_data(url: str):
     """
     A helper function for getting the data in some decent state. 
     """
-    df = pd.read_csv(
-        "https://raw.githubusercontent.com/jrg94/personal-data/main/health/weightlifting.csv"
-    )
+    df = pd.read_csv(url)
     df["Date"] = pd.to_datetime(df["Date"])
-    df["Volume"] = df["Weight"] * df["Total Reps"]
-    df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
-    df["Per Arm"] = df["Per Arm"].map({True: "Yes", False: "No"})
+    if url == constants.WEIGHTLIFTING_URL:
+        df["Volume"] = df["Weight"] * df["Total Reps"]
+        df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
+        df["Per Arm"] = df["Per Arm"].map({True: "Yes", False: "No"})
     return df
 
 
@@ -26,8 +25,9 @@ def time_filter(df: pd.DataFrame, window: str):
     """
     curr = df
     if window == "Last Three Months":
-        curr = df[df["Date"] >= datetime.date.today() -
-                  pd.offsets.MonthBegin(3)]
+        curr = df[
+            df["Date"] >= datetime.date.today() - pd.offsets.MonthBegin(3)
+        ]
     return curr
 
 
