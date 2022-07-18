@@ -200,6 +200,8 @@ fitbit_layout = html.Div(
         ),
         dbc.Spinner(
             dcc.Graph(id="steps-overview"),
-        )
+        ),
+        html.H2("Weight"),
+        dcc.Graph(id="weight-overview"),
     ]
 )
