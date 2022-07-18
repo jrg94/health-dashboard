@@ -199,9 +199,19 @@ fitbit_layout = html.Div(
             """
         ),
         dbc.Spinner(
-            dcc.Graph(id="steps-overview"),
+            [
+                dcc.Graph(id="steps-overview"),
+            ],
+            color="primary",
+            spinner_style={"height": "50px", "width": "50px"}
         ),
         html.H2("Weight"),
-        dcc.Graph(id="weight-overview"),
+        dbc.Spinner(
+            [
+                dcc.Graph(id="weight-overview"),
+            ],
+            color="primary",
+            spinner_style={"height": "50px", "width": "50px"}
+        )
     ]
 )
