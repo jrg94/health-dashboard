@@ -19,7 +19,7 @@ def update_exercise_volume(dropdown_value):
         children.append(html.H3(muscle))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
         display_order = {"Exercise": sorted(curr_muscle["Exercise"].unique())}
-        figure=px.scatter(
+        figure = px.scatter(
             curr_muscle,
             x="Date",
             y="Volume",
@@ -30,7 +30,7 @@ def update_exercise_volume(dropdown_value):
             trendline="lowess"
         )
         figure.data = [t for t in figure.data if t.mode == "lines"]
-        figure.update_traces(showlegend=True) 
+        figure.update_traces(showlegend=True)
         children.append(dcc.Graph(figure=figure))
         items.append(dbc.AccordionItem(children, title=muscle))
     return items
@@ -57,11 +57,11 @@ def update_1rm(dropdown_value):
             title=f"Projected 1RM by Muscle Group: {dropdown_value}",
             category_orders=display_order,
             symbol="Per Arm",
-            trendline="expanding", 
+            trendline="expanding",
             trendline_options=dict(function="max")
         )
         figure.data = [t for t in figure.data if t.mode == "lines"]
-        figure.update_traces(showlegend=True) 
+        figure.update_traces(showlegend=True)
         children.append(dcc.Graph(figure=figure))
         items.append(dbc.AccordionItem(children, title=muscle))
     return items
@@ -79,25 +79,29 @@ def update_exercise_sets_reps(dropdown_value):
         children = []
         tabs = []
         children.append(html.H3(muscle))
-        children.append(html.P(constants.workout_constants.get(muscle, {}).get("description", "")))
+        children.append(html.P(constants.workout_constants.get(
+            muscle, {}).get("description", "")))
         curr_muscle = curr[curr["Muscle Groups"] == muscle]
         for exercise in sorted(curr_muscle["Exercise"].unique()):
             tab_children = []
             tab_children.append(html.H4(exercise))
             exercise_constants = constants.workout_constants.get(exercise, {})
-            tab_children.append(utils.create_video_description_row(exercise_constants))
+            tab_children.append(
+                utils.create_video_description_row(exercise_constants))
             figure = utils.plot_exercise_sets_reps(
                 df,
                 dropdown_value,
                 muscle,
                 exercise
             )
-            tab_children.append(utils.create_recent_exercises_table(df, muscle, exercise))
+            tab_children.append(
+                utils.create_recent_exercises_table(df, muscle, exercise))
             tab_children.append(dcc.Graph(figure=figure))
             tabs.append(dbc.Tab(tab_children, label=exercise))
         children.append(dbc.Tabs(tabs))
         items.append(dbc.AccordionItem(children=children, title=muscle))
     return items
+
 
 @callback(
     Output("projected-1rm-overview", "figure"),
@@ -107,7 +111,8 @@ def update_exercise_sets_reps(dropdown_value):
 def homepage_overview_plots(dropdown_value):
     df = utils.load_data(constants.WEIGHTLIFTING_URL)
     df = utils.time_filter(df, dropdown_value)
-    exercise_groups = df.groupby(["Date", "Exercise"]).agg({"Volume": "sum", "Projected 1RM": "max"}).reset_index()
+    exercise_groups = df.groupby(["Date", "Exercise"]).agg(
+        {"Volume": "sum", "Projected 1RM": "max"}).reset_index()
     fig1 = px.scatter(
         exercise_groups,
         x="Date",
@@ -123,6 +128,7 @@ def homepage_overview_plots(dropdown_value):
         labels={"Projected 1RM": "Maximum Projected 1RM (lbs)"}
     )
     return fig2, fig1
+
 
 @callback(
     Output("steps-overview", "figure"),

@@ -5,9 +5,9 @@ import pandas as pd
 import plotly.express as px
 from dash import dcc, html
 from plotly_calplot import calplot
-from constants import WEIGHTLIFTING_URL
 
 import utils
+from constants import WEIGHTLIFTING_URL
 
 # Load data
 df = utils.load_data(WEIGHTLIFTING_URL)
@@ -66,7 +66,7 @@ home_layout = html.Div([
                             ]
                         )
                     ],
-                    color="light"         
+                    color="light"
                 ),
             ),
             dbc.Col(
@@ -81,7 +81,7 @@ home_layout = html.Div([
                                     I've been using one since 2015, so there's tons of useful
                                     data I can track like weight, steps, and calories. Use the
                                     link below to see some pretty pictures of my Fitbit data.
-                                    """  
+                                    """
                                 ),
                                 dbc.Button("Learn More", href="/fitbit"),
                             ]
@@ -115,7 +115,7 @@ lifting_layout = html.Div(
                 dcc.Graph(figure=fig),
                 dbc.Accordion(
                     id="exercise-sets-reps",
-                    class_name="pb-3", 
+                    class_name="pb-3",
                     style={"minHeight": "60px"}
                 ),
             ],
@@ -166,7 +166,7 @@ lifting_layout = html.Div(
             [
                 dcc.Graph(id="projected-1rm-overview"),
                 dbc.Accordion(
-                    id="1rm-over-time", 
+                    id="1rm-over-time",
                     class_name="pb-3",
                     style={"minHeight": "60px"}
                 )

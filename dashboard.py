@@ -5,7 +5,7 @@ import plotly.io as pio
 from dash import Input, Output, callback, dcc, html
 
 import callbacks
-from layouts import home_layout, lifting_layout, fitbit_layout
+from layouts import fitbit_layout, home_layout, lifting_layout
 
 TRC_LOGO = "https://avatars.githubusercontent.com/u/42280715"
 pio.templates[pio.templates.default].layout.colorway = px.colors.qualitative.G10

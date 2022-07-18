@@ -4,7 +4,9 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
 from dash import html
+
 import constants
+
 
 def load_data(url: str):
     """
@@ -79,7 +81,7 @@ def create_recent_exercises_table(df: pd.DataFrame, muscle: str, exercise: str):
 def create_video_description_row(exercise_constants: dict):
     """
     Creates a row that contains the exercise video and its description.
-    
+
     :param exercise_constants: the constants for the exercise
     """
     if "src" in exercise_constants:
