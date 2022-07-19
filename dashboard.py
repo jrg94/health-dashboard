@@ -5,7 +5,7 @@ import plotly.io as pio
 from dash import Input, Output, callback, dcc, html
 
 import callbacks
-from layouts import fitbit_layout, home_layout, lifting_layout
+from layouts import intellectual_layout, home_layout, physical_layout
 
 TRC_LOGO = "https://avatars.githubusercontent.com/u/42280715"
 pio.templates[pio.templates.default].layout.colorway = px.colors.qualitative.G10
@@ -13,7 +13,7 @@ pio.templates[pio.templates.default].layout.colorway = px.colors.qualitative.G10
 # App initialization
 app = dash.Dash(
     __name__,
-    title="Health Dashboard",
+    title="Grifski Wellness Dashboard",
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     suppress_callback_exceptions=True
 )
@@ -49,15 +49,15 @@ navlinks = dbc.Nav(
         ),
         dbc.NavItem(
             dbc.NavLink(
-                [html.Div("Lifting")],
-                href="/lifting",
+                [html.Div("Physical")],
+                href="/physical-wellness",
                 active="exact",
             )
         ),
         dbc.NavItem(
             dbc.NavLink(
-                [html.Div("Fitbit")],
-                href="/fitbit",
+                [html.Div("Intellectual")],
+                href="/intellectual-wellness",
                 active="exact",
             )
         )
@@ -70,7 +70,7 @@ logo = html.A(
         [
             dbc.Col(html.Img(src=TRC_LOGO, height="30px")),
             dbc.Col(
-                dbc.NavbarBrand("Grifski Health Dashboard", className="ms-2")
+                dbc.NavbarBrand("Grifski Wellness Dashboard", className="ms-2")
             ),
         ],
         align="center",
@@ -104,10 +104,10 @@ app.layout = dbc.Container([
 def display_page(pathname):
     if pathname == "/":
         return home_layout
-    elif pathname == "/lifting":
-        return lifting_layout
-    elif pathname == "/fitbit":
-        return fitbit_layout
+    elif pathname == "/physical-wellness":
+        return physical_layout
+    elif pathname == "/intellectual-wellness":
+        return intellectual_layout
     else:
         return "404"
 
