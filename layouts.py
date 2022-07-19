@@ -1,52 +1,16 @@
-import datetime
-
 import dash_bootstrap_components as dbc
-import pandas as pd
-import plotly.express as px
 from dash import dcc, html
-from plotly_calplot import calplot
 
 import utils
-from constants import WEIGHTLIFTING_URL
-
-# Load data
-df = utils.load_data(WEIGHTLIFTING_URL)
-
-# Workout plots
-fatigue = (
-    df[df["Date"] >= datetime.date.today() - pd.offsets.Day(2)]
-    .groupby("Muscle Groups")
-    .agg({"Volume": "sum", "Projected 1RM": "mean"})
-)
-missing = set(df["Muscle Groups"].unique()) - set(fatigue.index)
-fatigue["Cumulative Volume / Average Project 1RM"] = (
-    fatigue["Volume"] / fatigue["Projected 1RM"]
-)
-for muscle in missing:
-    fatigue.loc[muscle] = 0
-    fatigue = fatigue.sort_values(
-        "Cumulative Volume / Average Project 1RM", ascending=True)
-    fig = px.bar(fatigue, y="Cumulative Volume / Average Project 1RM")
-
-# Home plots
-days = df.groupby("Date").agg({"Exercise": "count"}).reset_index()
-fig2 = calplot(
-    days,
-    x="Date",
-    y="Exercise",
-    colorscale="greens",
-    years_title=True,
-    showscale=True
-)
-fig2.update_layout(width=None)
 
 home_layout = html.Div([
-    html.H2("Home"),
+    html.H1("Grifski Health Dashboard"),
     html.P(
         """
-        Here on the homepage, you can find quick links to the various health and fitness pages.
+        Welcome to my health dashboard. I use this space to track my health and fitness progress
+        using pretty pictures. Below, you can find quick links to the various health and fitness pages.
         """
-    ),
+    ),    
     dbc.Row(
         [
             dbc.Col(
@@ -96,23 +60,30 @@ home_layout = html.Div([
 
 lifting_layout = html.Div(
     [
+        html.H1("Lifting"),
+        html.P(
+            """
+            Welcome to the Lifting page! Feel free to use the dropdown to pick a window of time 
+            besides "All Time".
+            """
+        ),
         html.H2("Exercise Sets and Reps"),
         html.P
         (
             """
-                This section is just bookkeeping for me. It's hard to remember how much weight I did
-                last, so I made plots of the individual exercise by set and rep. Also, to help myself
-                out, I track my muscle fatigue on a 48-hour interval. It's a bit rudimentary, but 
-                basically I compute a ratio of muscle group volume (sum) against the projected 1RM 
-                (mean). This is a pretty sloppy metric since I don't find 1RM very accurate and the 
-                aggregate functions are somewhat misleading, but I don't really think it needs to be 
-                that accurate. Regardless, it's not like I have a scientific way of assessing fatique 
-                anyway.
-                """
+            This section is just bookkeeping for me. It's hard to remember how much weight I did
+            last, so I made plots of the individual exercise by set and rep. Also, to help myself
+            out, I track my muscle fatigue on a 48-hour interval. It's a bit rudimentary, but 
+            basically I compute a ratio of muscle group volume (sum) against the projected 1RM 
+            (mean). This is a pretty sloppy metric since I don't find 1RM very accurate and the 
+            aggregate functions are somewhat misleading, but I don't really think it needs to be 
+            that accurate. Regardless, it's not like I have a scientific way of assessing fatique 
+            anyway.
+            """
         ),
         dbc.Spinner(
             [
-                dcc.Graph(figure=fig),
+                dcc.Graph(figure=utils.create_fatique_plot()),
                 dbc.Accordion(
                     id="exercise-sets-reps",
                     class_name="pb-3",
@@ -182,12 +153,19 @@ lifting_layout = html.Div(
             love it since I can't figure out how to make it dynamic. That said, it gets the job done.
             """
         ),
-        dcc.Graph(figure=fig2),
+        dcc.Graph(figure=utils.create_calendar_plot()),
     ]
 )
 
 fitbit_layout = html.Div(
     [
+        html.H1("Fitbit"),
+        html.P(
+            """
+            Welcome to the Fitbit page! Feel free to use the dropdown to pick a 
+            window of time besides "All Time".
+            """
+        ),
         html.H2("Steps"),
         html.P(
             """

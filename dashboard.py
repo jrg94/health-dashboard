@@ -93,13 +93,6 @@ app.layout = dbc.Container([
         color="dark",
         dark="True"
     ),
-    html.H1("Health Dashboard"),
-    html.P(
-        """
-            Welcome to my Health Dashboard. I use this space to track my health and fitness progress
-            using pretty pictures. Use the dropdown to pick a window of time besides "All Time".
-            """
-    ),
     html.Div(id="page-content")
 ])
 

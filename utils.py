@@ -4,6 +4,7 @@ import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
 from dash import html
+from plotly_calplot import calplot
 
 import constants
 
@@ -102,3 +103,41 @@ def create_video_description_row(exercise_constants: dict):
         return dbc.Row(
             dbc.Col(html.P(exercise_constants.get("description", "")))
         )
+
+
+def create_fatique_plot():
+    # Load data
+    df = load_data(constants.WEIGHTLIFTING_URL)
+
+    # Workout plots
+    fatigue = (
+        df[df["Date"] >= datetime.date.today() - pd.offsets.Day(2)]
+        .groupby("Muscle Groups")
+        .agg({"Volume": "sum", "Projected 1RM": "mean"})
+    )
+
+    missing = set(df["Muscle Groups"].unique()) - set(fatigue.index)
+    fatigue["Cumulative Volume / Average Project 1RM"] = (
+        fatigue["Volume"] / fatigue["Projected 1RM"]
+    )
+
+    for muscle in missing:
+        fatigue.loc[muscle] = 0
+    
+    fatigue = fatigue.sort_values("Cumulative Volume / Average Project 1RM", ascending=True)
+    return px.bar(fatigue, y="Cumulative Volume / Average Project 1RM")
+
+
+def create_calendar_plot():
+    df = load_data(constants.WEIGHTLIFTING_URL)
+    days = df.groupby("Date").agg({"Exercise": "count"}).reset_index()
+    fig = calplot(
+        days,
+        x="Date",
+        y="Exercise",
+        colorscale="greens",
+        years_title=True,
+        showscale=True
+    )
+    fig.update_layout(width=None)
+    return fig
