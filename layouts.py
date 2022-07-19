@@ -30,7 +30,6 @@ home_layout = html.Div([
                             ]
                         )
                     ],
-                    color="light"
                 ),
             ),
             dbc.Col(
@@ -51,7 +50,6 @@ home_layout = html.Div([
                             ]
                         )
                     ],
-                    color="light"
                 )
             )
         ]
@@ -157,6 +155,8 @@ lifting_layout = html.Div(
     ]
 )
 
+steps_highlights = utils.get_highlights("Steps")
+weight_highlights = utils.get_highlights("Weight")
 fitbit_layout = html.Div(
     [
         html.H1("Fitbit"),
@@ -166,6 +166,46 @@ fitbit_layout = html.Div(
             window of time besides "All Time".
             """
         ),
+        dbc.CardGroup([
+            dbc.Card(
+                [
+                    dbc.CardHeader("Steps Highlights"),
+                    dbc.CardBody([
+                        dbc.ListGroup(
+                            [
+                                dbc.ListGroupItem([
+                                    html.Strong("Min: "),
+                                    f"{int(steps_highlights['min'])} steps"
+                                ]),
+                                dbc.ListGroupItem([
+                                    html.Strong("Max: "),
+                                    f"{int(steps_highlights['max'])} steps"
+                                ]),
+                            ],
+                            flush=True,
+                        )
+                    ])
+                ]
+            ),
+            dbc.Card([
+                dbc.CardHeader("Weight Highlights"),
+                dbc.CardBody([
+                    dbc.ListGroup(
+                        [
+                            dbc.ListGroupItem([
+                                html.Strong("Min: "),
+                                f"{weight_highlights['min']} lbs"
+                            ]),
+                            dbc.ListGroupItem([
+                                html.Strong("Max: "),
+                                f"{weight_highlights['max']} lbs"
+                            ]),
+                        ],
+                        flush=True,
+                    )                
+                ])
+            ]),
+        ]),
         html.H2("Steps"),
         html.P(
             """

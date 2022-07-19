@@ -141,3 +141,13 @@ def create_calendar_plot():
     )
     fig.update_layout(width=None)
     return fig
+
+
+def get_highlights(column: str) -> dict:
+    df = load_data(constants.FITBIT_URL)
+    return {
+        "min": df[column].min(), 
+        "max": df[column].max(),
+        "mean": df[column].mean(),
+        "median": df[column].median()
+    }
