@@ -149,13 +149,14 @@ def steps_overview_plot(dropdown_value):
 
 @callback(
     Output("weight-overview", "figure"),
+    Output("weight-histogram", "figure"),
     Input("dropdown", "value")
 )
 def weight_overview_plot(dropdown_value):
     df = utils.load_data(constants.FITBIT_URL)
     df = utils.time_filter(df, dropdown_value)
     df = df.dropna(subset=["Weight"])
-    fig = px.scatter(
+    overview = px.scatter(
         df,
         x="Date",
         y="Weight",
@@ -163,4 +164,8 @@ def weight_overview_plot(dropdown_value):
         trendline_options=dict(window=30, min_periods=1),
         trendline_color_override=px.colors.qualitative.G10[8]
     )
-    return fig
+    histogram = px.histogram(
+        df,
+        x="Weight"
+    )
+    return overview, histogram 

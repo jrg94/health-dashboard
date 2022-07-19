@@ -163,7 +163,8 @@ fitbit_layout = html.Div(
         html.P(
             """
             Welcome to the Fitbit page! Feel free to use the dropdown to pick a 
-            window of time besides "All Time".
+            window of time besides "All Time". Also, feel free to checkout some
+            of the all time highlights below. 
             """
         ),
         dbc.CardGroup([
@@ -175,11 +176,19 @@ fitbit_layout = html.Div(
                             [
                                 dbc.ListGroupItem([
                                     html.Strong("Min: "),
-                                    f"{int(steps_highlights['min'])} steps"
+                                    f"{int(steps_highlights['min']):,} steps"
                                 ]),
                                 dbc.ListGroupItem([
                                     html.Strong("Max: "),
-                                    f"{int(steps_highlights['max'])} steps"
+                                    f"{int(steps_highlights['max']):,} steps"
+                                ]),
+                                dbc.ListGroupItem([
+                                    html.Strong("Mean: "),
+                                    f"{int(steps_highlights['mean']):,} steps"
+                                ]),
+                                dbc.ListGroupItem([
+                                    html.Strong("Median: "),
+                                    f"{int(steps_highlights['median']):,} steps"
                                 ]),
                             ],
                             flush=True,
@@ -194,11 +203,19 @@ fitbit_layout = html.Div(
                         [
                             dbc.ListGroupItem([
                                 html.Strong("Min: "),
-                                f"{weight_highlights['min']} lbs"
+                                f"{weight_highlights['min']:,} lbs"
                             ]),
                             dbc.ListGroupItem([
                                 html.Strong("Max: "),
-                                f"{weight_highlights['max']} lbs"
+                                f"{weight_highlights['max']:,} lbs"
+                            ]),
+                            dbc.ListGroupItem([
+                                html.Strong("Mean: "),
+                                f"{weight_highlights['mean']:,.1f} lbs"
+                            ]),
+                            dbc.ListGroupItem([
+                                html.Strong("Median: "),
+                                f"{weight_highlights['median']:,.1f} lbs"
                             ]),
                         ],
                         flush=True,
@@ -227,6 +244,7 @@ fitbit_layout = html.Div(
         dbc.Spinner(
             [
                 dcc.Graph(id="weight-overview"),
+                dcc.Graph(id="weight-histogram")
             ],
             color="primary",
             spinner_style={"height": "50px", "width": "50px"}
