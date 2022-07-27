@@ -19,6 +19,10 @@ def load_data(url: str):
         df["Volume"] = df["Weight"] * df["Total Reps"]
         df["Projected 1RM"] = df["Weight"] * (1 + (df["Reps"] / 30))
         df["Per Arm"] = df["Per Arm"].map({True: "Yes", False: "No"})
+    if url == constants.FITBIT_URL:
+        df["Total Sleep (hours)"] = df["Total Sleep (minutes)"] / 60
+        hours, minutes = df["Total Sleep (minutes)"].divmod(60)
+        df["Sleep (readable)"] = hours.astype(str).str.split(".", expand=True)[0] + "h " + minutes.astype(str).str.split(".", expand=True)[0] + "m"
     return df
 
 
@@ -123,8 +127,9 @@ def create_fatique_plot():
 
     for muscle in missing:
         fatigue.loc[muscle] = 0
-    
-    fatigue = fatigue.sort_values("Cumulative Volume / Average Project 1RM", ascending=True)
+
+    fatigue = fatigue.sort_values(
+        "Cumulative Volume / Average Project 1RM", ascending=True)
     return px.bar(fatigue, y="Cumulative Volume / Average Project 1RM")
 
 
@@ -146,8 +151,45 @@ def create_calendar_plot():
 def get_highlights(column: str) -> dict:
     df = load_data(constants.FITBIT_URL)
     return {
-        "min": df[column].min(), 
+        "min": df[column].min(),
         "max": df[column].max(),
         "mean": df[column].mean(),
-        "median": df[column].median()
+        "median": df[column].median(),
+        "mode": df[column].mode(),
     }
+
+
+def create_highlight_card(column: str, units: str, title: str):
+    highlights = get_highlights(column)
+    return dbc.Card(
+        [
+            dbc.CardHeader(title),
+            dbc.CardBody([
+                dbc.ListGroup(
+                    [
+                        dbc.ListGroupItem([
+                            html.Strong("Min: "),
+                            f"{int(highlights['min']):,} {units}"
+                        ]),
+                        dbc.ListGroupItem([
+                            html.Strong("Max: "),
+                            f"{int(highlights['max']):,} {units}"
+                        ]),
+                        dbc.ListGroupItem([
+                            html.Strong("Mean: "),
+                            f"{int(highlights['mean']):,} {units}"
+                        ]),
+                        dbc.ListGroupItem([
+                            html.Strong("Median: "),
+                            f"{int(highlights['median']):,} {units}"
+                        ]),
+                        dbc.ListGroupItem([
+                            html.Strong("Mode: "),
+                            f"{int(highlights['mode'].tolist()[0]):,} {units}"
+                        ])
+                    ],
+                    flush=True,
+                )
+            ])
+        ]
+    )

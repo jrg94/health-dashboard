@@ -169,3 +169,22 @@ def weight_overview_plot(dropdown_value):
         x="Weight"
     )
     return overview, histogram 
+
+@callback(
+    Output("sleep-overview", "figure"),
+    Input("dropdown", "value")
+)
+def sleep_overview_plot(dropdown_value):
+    df = utils.load_data(constants.FITBIT_URL)
+    df = utils.time_filter(df, dropdown_value)
+    df = df.dropna(subset=["Total Sleep (hours)"])
+    fig = px.scatter(
+        df,
+        x="Date",
+        y="Total Sleep (hours)",
+        trendline="rolling",
+        trendline_options=dict(window=30, min_periods=1),
+        trendline_color_override=px.colors.qualitative.G10[8],
+        hover_data=["Sleep (readable)"],
+    )
+    return fig

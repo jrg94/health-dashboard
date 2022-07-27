@@ -58,8 +58,6 @@ home_layout = html.Div([
     )
 ])
 
-steps_highlights = utils.get_highlights("Steps")
-weight_highlights = utils.get_highlights("Weight")
 physical_layout = html.Div(
     [
         html.H1("Physical Wellness"),
@@ -67,66 +65,36 @@ physical_layout = html.Div(
             """
             Welcome to the physical wellness page! Feel free to use the dropdown to pick a 
             window of time besides "All Time" to filter the various time series plots.
-            Below you can check out some overall highlights.
             """
         ),
-        dbc.CardGroup([
-            dbc.Card(
-                [
-                    dbc.CardHeader("Steps Highlights"),
-                    dbc.CardBody([
-                        dbc.ListGroup(
-                            [
-                                dbc.ListGroupItem([
-                                    html.Strong("Min: "),
-                                    f"{int(steps_highlights['min']):,} steps"
-                                ]),
-                                dbc.ListGroupItem([
-                                    html.Strong("Max: "),
-                                    f"{int(steps_highlights['max']):,} steps"
-                                ]),
-                                dbc.ListGroupItem([
-                                    html.Strong("Mean: "),
-                                    f"{int(steps_highlights['mean']):,} steps"
-                                ]),
-                                dbc.ListGroupItem([
-                                    html.Strong("Median: "),
-                                    f"{int(steps_highlights['median']):,} steps"
-                                ]),
-                            ],
-                            flush=True,
-                        )
-                    ])
-                ]
-            ),
-            dbc.Card([
-                dbc.CardHeader("Weight Highlights"),
-                dbc.CardBody([
-                    dbc.ListGroup(
-                        [
-                            dbc.ListGroupItem([
-                                html.Strong("Min: "),
-                                f"{weight_highlights['min']:,} lbs"
-                            ]),
-                            dbc.ListGroupItem([
-                                html.Strong("Max: "),
-                                f"{weight_highlights['max']:,} lbs"
-                            ]),
-                            dbc.ListGroupItem([
-                                html.Strong("Mean: "),
-                                f"{weight_highlights['mean']:,.1f} lbs"
-                            ]),
-                            dbc.ListGroupItem([
-                                html.Strong("Median: "),
-                                f"{weight_highlights['median']:,.1f} lbs"
-                            ]),
-                        ],
-                        flush=True,
-                    )                
-                ])
+        html.H2("Table of Contents"),
+        html.Ol([
+            html.Li(html.A("Highlights", href="#highlights")),
+            html.Li(html.A("Exercise", href="#exercise")),
+            html.Ol([
+                html.Li(html.A("Exercise Sets and Reps", href="#exercise-sets-and-reps")),
+                html.Li(html.A("Lift Volume", href="#lift-volume")),
+                html.Li(html.A("Projected One Rep Maximum", href="#projected-1rm")),
+                html.Li(html.A("Workout History", href="#workout-history")),
             ]),
+            html.Li(html.A("Health", href="#health")),
+            html.Ol([
+                html.Li(html.A("Steps", href="#steps")),
+                html.Li(html.A("Weight", href="#weight")),
+                html.Li(html.A("Sleep", href="#sleep")),
+            ])
         ]),
-        html.H2("Exercise"),
+        html.H2("Highlights", id="highlights"),
+        dbc.CardGroup(
+            [
+                utils.create_highlight_card("Steps", "steps / day", "Steps Highlights"),
+                utils.create_highlight_card("Weight", "lbs", "Weight Highlights"),
+                utils.create_highlight_card("Total Sleep (minutes)", "minutes", "Sleep Highlights"),
+                utils.create_highlight_card("Resting Heart Rate", "bpm", "Resting Heart Rate Highlights"),
+            ],
+            className="pb-2 pt-2",
+        ),
+        html.H2("Exercise", id="exercise"),
         html.P(
             """
             One of the core components of physical wellness is exercise. As a result, I've
@@ -134,7 +102,7 @@ physical_layout = html.Div(
             there are some cardio exercises as well.
             """
         ),
-        html.H3("Exercise Sets and Reps"),
+        html.H3("Exercise Sets and Reps", id="exercise-sets-and-reps"),
         html.P
         (
             """
@@ -160,7 +128,7 @@ physical_layout = html.Div(
             color="primary",
             spinner_style={"height": "50px", "width": "50px"}
         ),
-        html.H3("Lift Volume"),
+        html.H3("Lift Volume", id="lift-volume"),
         html.P(
             """
             For the sake of tracking, I define lift volume as the weight of the lift multiplied by 
@@ -184,7 +152,7 @@ physical_layout = html.Div(
             color="primary",
             spinner_style={"height": "50px", "width": "50px"}
         ),
-        html.H3("Projected One Rep Maximum"),
+        html.H3("Projected One Rep Maximum", id="projected-1rm"),
         html.P(
             """
             Projected 1RM is computed by using the standard 1RM formula to
@@ -212,7 +180,23 @@ physical_layout = html.Div(
             color="primary",
             spinner_style={"height": "50px", "width": "50px"}
         ),
-        html.H3("Steps"),
+        html.H3("Workout History", id="workout-history"),
+        html.P(
+            """
+            This is a quick calendar view of all my workouts. The heatmaps show days where 
+            I did less or more workouts. I borrowed this figure from calplot. I don't really
+            love it since I can't figure out how to make it dynamic. That said, it gets the job done.
+            """
+        ),
+        dcc.Graph(figure=utils.create_calendar_plot()),
+        html.H2("Health", id="health"),
+        html.P(
+            """
+            Broadly speaking, another major aspect of physical wellness is overall health.
+            Here, I track weight, body fat, sleep, steps, and heart rate metrics.
+            """    
+        ),
+        html.H3("Steps", id="steps"),
         html.P(
             """
             To no one's surprise, the primary use of a Fitbit is to track steps.
@@ -229,23 +213,7 @@ physical_layout = html.Div(
             color="primary",
             spinner_style={"height": "50px", "width": "50px"}
         ),
-        html.H3("Calendar View"),
-        html.P(
-            """
-            This is a quick calendar view of all my workouts. The heatmaps show days where 
-            I did less or more workouts. I borrowed this figure from calplot. I don't really
-            love it since I can't figure out how to make it dynamic. That said, it gets the job done.
-            """
-        ),
-        dcc.Graph(figure=utils.create_calendar_plot()),
-        html.H2("Health"),
-        html.P(
-            """
-            Broadly speaking, another major aspect of physical wellness is overall health.
-            Here, I track weight, body fat, sleep, and heart rate metrics.
-            """    
-        ),
-        html.H3("Weight"),
+        html.H3("Weight", id="weight"),
         html.P(
             """
             For a few years now, I've been tracking my weight on and off with a bluetooth
@@ -262,6 +230,15 @@ physical_layout = html.Div(
             color="primary",
             spinner_style={"height": "50px", "width": "50px"}
         ),
+        html.H3("Sleep", id="sleep"),
+        html.P("TBD"),
+        dbc.Spinner(
+            [
+                dcc.Graph(id="sleep-overview"),
+            ],
+            color="primary",
+            spinner_style={"height": "50px", "width": "50px"}
+        )
     ]
 )
 
