@@ -152,7 +152,7 @@ def get_highlights(column: str) -> dict:
     df = load_data(constants.FITBIT_URL)
     return {
         "min": df[df[column] == df[column].min()],
-        "max": df[column].max(),
+        "max": df[df[column] == df[column].max()],
         "mean": df[column].mean(),
         "median": df[column].median(),
         "mode": df[column].mode(),
@@ -161,7 +161,8 @@ def get_highlights(column: str) -> dict:
 
 def create_highlight_card(column: str, units: str, title: str):
     highlights = get_highlights(column)
-    min_series: pd.DataFrame = highlights['min']
+    min_df: pd.DataFrame = highlights['min']
+    max_df: pd.DataFrame = highlights['max']
     return dbc.Card(
         [
             dbc.CardHeader(title),
@@ -169,13 +170,16 @@ def create_highlight_card(column: str, units: str, title: str):
                 dbc.ListGroup(
                     [
                         dbc.ListGroupItem([
-                            html.Strong("Min: "),
-                            f"{int(min_series[column]):,} {units} ",
-                            f"[{pd.to_datetime(min_series['Date'].values[0]).date()}]"
+                            dbc.ListGroup([
+                                html.Strong("Min: "),
+                            ]),
+                            f"{pd.to_datetime(min_df['Date'].values[0]).date()}: ",
+                            f"{int(min_df[column]):,} {units} "
                         ]),
                         dbc.ListGroupItem([
                             html.Strong("Max: "),
-                            f"{int(highlights['max']):,} {units}"
+                            f"{int(max_df[column]):,} {units} ",
+                            f"[{pd.to_datetime(max_df['Date'].values[0]).date()}]"
                         ]),
                         dbc.ListGroupItem([
                             html.Strong("Mean: "),
