@@ -165,21 +165,31 @@ def create_highlight_card(column: str, units: str, title: str):
     max_df: pd.DataFrame = highlights['max']
     return dbc.Card(
         [
-            dbc.CardHeader(title),
+            dbc.CardHeader(html.Center(title)),
             dbc.CardBody([
                 dbc.ListGroup(
                     [
                         dbc.ListGroupItem([
                             dbc.ListGroup([
-                                html.Strong("Min: "),
+                                html.Center(html.Strong("Minimum"))
                             ]),
-                            f"{pd.to_datetime(min_df['Date'].values[0]).date()}: ",
-                            f"{int(min_df[column]):,} {units} "
+                            dbc.ListGroup([
+                                html.Center(f"{pd.to_datetime(min_df['Date'].values[0]).date()}")
+                            ]),
+                            dbc.ListGroup([
+                                html.Center(f"{int(min_df[column]):,} {units}")
+                            ])
                         ]),
                         dbc.ListGroupItem([
-                            html.Strong("Max: "),
-                            f"{int(max_df[column]):,} {units} ",
-                            f"[{pd.to_datetime(max_df['Date'].values[0]).date()}]"
+                            dbc.ListGroup([
+                                html.Center(html.Strong("Maximum"))
+                            ]),       
+                            dbc.ListGroup([
+                                html.Center(f"{pd.to_datetime(max_df['Date'].values[0]).date()}")
+                            ]),  
+                            dbc.ListGroup([                   
+                                html.Center(f"{int(max_df[column]):,} {units}")
+                            ]),
                         ]),
                         dbc.ListGroupItem([
                             html.Strong("Mean: "),
