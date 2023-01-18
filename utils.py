@@ -153,9 +153,9 @@ def get_highlights(column: str) -> dict:
     return {
         "min": df[df[column] == df[column].min()],
         "max": df[df[column] == df[column].max()],
-        "mean": df[column].mean(),
-        "median": df[column].median(),
-        "mode": df[column].mode(),
+        "mean": df[df[column] == df[column].mean()],
+        "median": df[df[column] == df[column].median()],
+        "mode": df[df[column] == df[column].mode()]
     }
 
 
@@ -163,6 +163,9 @@ def create_highlight_card(column: str, units: str, title: str):
     highlights = get_highlights(column)
     min_df: pd.DataFrame = highlights['min']
     max_df: pd.DataFrame = highlights['max']
+    mean_df: pd.DataFrame = highlights['mean']
+    median_df: pd.DataFrame = highlights['median']
+    mode_df: pd.DataFrame = highlights['mode']
     return dbc.Card(
         [
             dbc.CardHeader(html.Center(title)),
@@ -192,15 +195,21 @@ def create_highlight_card(column: str, units: str, title: str):
                             ]),
                         ]),
                         dbc.ListGroupItem([
-                            html.Strong("Mean: "),
+                            dbc.ListGroup([
+                                html.Center(html.Strong("Mean"))
+                            ]),                            
                             f"{int(highlights['mean']):,} {units}"
                         ]),
                         dbc.ListGroupItem([
-                            html.Strong("Median: "),
+                            dbc.ListGroup([
+                                html.Center(html.Strong("Median"))
+                            ]),                            
                             f"{int(highlights['median']):,} {units}"
                         ]),
                         dbc.ListGroupItem([
-                            html.Strong("Mode: "),
+                            dbc.ListGroup([
+                                html.Center(html.Strong("Mode"))
+                            ]),                            
                             f"{int(highlights['mode'].tolist()[0]):,} {units}"
                         ])
                     ],
