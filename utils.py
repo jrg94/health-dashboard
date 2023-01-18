@@ -150,6 +150,7 @@ def create_calendar_plot():
 
 def get_highlights(column: str) -> dict:
     df = load_data(constants.FITBIT_URL)
+    print(df.head())
     return {
         "min": df[column].min(),
         "max": df[column].max(),
