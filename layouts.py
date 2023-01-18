@@ -84,7 +84,7 @@ physical_layout = html.Div(
                 html.Li(html.A("Sleep", href="#sleep")),
             ])
         ]),
-        html.H2("Highlights", id="highlights"),
+        html.H2(f"{utils.get_number_of_records():,} Days of Highlights", id="highlights"),
         dbc.CardGroup(
             [
                 utils.create_highlight_card("Steps", "steps / day", "Steps Highlights"),
