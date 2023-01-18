@@ -150,9 +150,8 @@ def create_calendar_plot():
 
 def get_highlights(column: str) -> dict:
     df = load_data(constants.FITBIT_URL)
-    print(df.head())
     return {
-        "min": df[column].min(),
+        "min": df[df[column] == df[column].min()],
         "max": df[column].max(),
         "mean": df[column].mean(),
         "median": df[column].median(),
@@ -162,6 +161,7 @@ def get_highlights(column: str) -> dict:
 
 def create_highlight_card(column: str, units: str, title: str):
     highlights = get_highlights(column)
+    min_series: pd.DataFrame = highlights['min']
     return dbc.Card(
         [
             dbc.CardHeader(title),
@@ -170,7 +170,8 @@ def create_highlight_card(column: str, units: str, title: str):
                     [
                         dbc.ListGroupItem([
                             html.Strong("Min: "),
-                            f"{int(highlights['min']):,} {units}"
+                            f"{int(min_series[column]):,} {units} ",
+                            f"[{pd.to_datetime(min_series['Date'].values[0]).date()}]"
                         ]),
                         dbc.ListGroupItem([
                             html.Strong("Max: "),
