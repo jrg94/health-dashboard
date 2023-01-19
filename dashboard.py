@@ -4,6 +4,7 @@ import plotly.express as px
 import plotly.io as pio
 from dash import Input, Output, callback, dcc, html
 
+import callbacks
 from layouts import home_layout, intellectual_layout, physical_layout
 
 TRC_LOGO = "https://avatars.githubusercontent.com/u/42280715"
