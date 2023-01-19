@@ -141,8 +141,8 @@ def steps_overview_plot(dropdown_value):
         df,
         x="Date",
         y="Steps",
-        trendline="rolling",
-        trendline_options=dict(window=30, min_periods=1),
+        trendline="lowess", 
+        trendline_options=dict(frac=0.05),
         trendline_color_override=px.colors.qualitative.G10[8]
     )
     return fig
@@ -160,8 +160,8 @@ def weight_overview_plot(dropdown_value):
         df,
         x="Date",
         y="Weight",
-        trendline="rolling",
-        trendline_options=dict(window=30, min_periods=1),
+        trendline="lowess", 
+        trendline_options=dict(frac=0.05),
         trendline_color_override=px.colors.qualitative.G10[8]
     )
     histogram = px.histogram(
@@ -182,8 +182,8 @@ def sleep_overview_plot(dropdown_value):
         df,
         x="Date",
         y="Total Sleep (hours)",
-        trendline="rolling",
-        trendline_options=dict(window=30, min_periods=1),
+        trendline="lowess", 
+        trendline_options=dict(frac=0.05),
         trendline_color_override=px.colors.qualitative.G10[8],
         hover_data=["Sleep (readable)"],
     )

@@ -84,7 +84,7 @@ physical_layout = html.Div(
                 html.Li(html.A("Sleep", href="#sleep")),
             ])
         ]),
-        html.H2("Highlights", id="highlights"),
+        html.H2(f"{utils.get_number_of_records():,} Days of Highlights", id="highlights"),
         dbc.CardGroup(
             [
                 utils.create_highlight_card("Steps", "steps / day", "Steps Highlights"),
@@ -231,7 +231,13 @@ physical_layout = html.Div(
             spinner_style={"height": "50px", "width": "50px"}
         ),
         html.H3("Sleep", id="sleep"),
-        html.P("TBD"),
+        html.P(
+            """
+            One of the perks of using a FitBit for so long is that I also can track my sleep.
+            It seems as I get older, I sleep more—at least for now. We'll see what happens when
+            I start to have kids.
+            """
+        ),
         dbc.Spinner(
             [
                 dcc.Graph(id="sleep-overview"),

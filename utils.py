@@ -148,44 +148,80 @@ def create_calendar_plot():
     return fig
 
 
+def get_number_of_records() -> int:
+    df = load_data(constants.FITBIT_URL)
+    return len(df)
+
+
 def get_highlights(column: str) -> dict:
     df = load_data(constants.FITBIT_URL)
     return {
-        "min": df[column].min(),
-        "max": df[column].max(),
+        "min": df[df[column] == df[column].min()],
+        "max": df[df[column] == df[column].max()],
         "mean": df[column].mean(),
         "median": df[column].median(),
-        "mode": df[column].mode(),
+        "mode": df[column].mode()[0]
     }
 
 
 def create_highlight_card(column: str, units: str, title: str):
     highlights = get_highlights(column)
+    min_df: pd.DataFrame = highlights['min']
+    max_df: pd.DataFrame = highlights['max']
+    mean: float = highlights['mean']
+    median: float = highlights['median']
+    mode: float = highlights['mode']
     return dbc.Card(
         [
-            dbc.CardHeader(title),
+            dbc.CardHeader(html.Center(title)),
             dbc.CardBody([
                 dbc.ListGroup(
                     [
                         dbc.ListGroupItem([
-                            html.Strong("Min: "),
-                            f"{int(highlights['min']):,} {units}"
+                            dbc.ListGroup([
+                                html.Center(html.Strong("Minimum"))
+                            ]),
+                            dbc.ListGroup([
+                                html.Center(f"{pd.to_datetime(min_df['Date'].values[0]).date()}")
+                            ]),
+                            dbc.ListGroup([
+                                html.Center(f"{int(min_df[column]):,} {units}")
+                            ])
                         ]),
                         dbc.ListGroupItem([
-                            html.Strong("Max: "),
-                            f"{int(highlights['max']):,} {units}"
+                            dbc.ListGroup([
+                                html.Center(html.Strong("Maximum"))
+                            ]),       
+                            dbc.ListGroup([
+                                html.Center(f"{pd.to_datetime(max_df['Date'].values[0]).date()}")
+                            ]),  
+                            dbc.ListGroup([                   
+                                html.Center(f"{int(max_df[column]):,} {units}")
+                            ]),
                         ]),
                         dbc.ListGroupItem([
-                            html.Strong("Mean: "),
-                            f"{int(highlights['mean']):,} {units}"
+                            dbc.ListGroup([
+                                html.Center(html.Strong("Mean"))
+                            ]),                           
+                            dbc.ListGroup([                   
+                                html.Center(f"{int(mean):,} {units}")
+                            ]),
                         ]),
                         dbc.ListGroupItem([
-                            html.Strong("Median: "),
-                            f"{int(highlights['median']):,} {units}"
+                            dbc.ListGroup([
+                                html.Center(html.Strong("Median"))
+                            ]),                         
+                            dbc.ListGroup([                   
+                                html.Center(f"{int(median):,} {units}")
+                            ]),
                         ]),
                         dbc.ListGroupItem([
-                            html.Strong("Mode: "),
-                            f"{int(highlights['mode'].tolist()[0]):,} {units}"
+                            dbc.ListGroup([
+                                html.Center(html.Strong("Mode"))
+                            ]),                        
+                            dbc.ListGroup([                   
+                                html.Center(f"{int(mode):,} {units}")
+                            ]),
                         ])
                     ],
                     flush=True,
